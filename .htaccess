@@ -1,0 +1,44 @@
+# FAE Ausbildungs-Landingpage – Server-Regeln (Apache Shared Hosting).
+# Liegt mit im Deploy-Ordner und wird beim Upload einfach mitgenommen.
+# Jede Direktive ist in <IfModule> gekapselt: fehlt ein Modul beim Hoster,
+# wird der Block still uebersprungen statt einen 500er zu werfen.
+
+# ---- Cache-Strategie ---------------------------------------------------
+# Das HTML revalidiert bei jedem Aufruf (Updates greifen sofort), alle
+# Assets duerfen ein Jahr in den Cache. Die Regel dazu: Wird eine Datei
+# inhaltlich geaendert, bekommt sie einen NEUEN Namen (intro-v2.mp4) und
+# die Referenz im HTML wird angepasst. Da das HTML nie gecacht wird, sehen
+# Besucher nie einen Mischstand aus alten und neuen Dateien.
+<IfModule mod_headers.c>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+  <FilesMatch "\.(mp4|webp|jpg|jpeg|png|svg|woff|woff2)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+</IfModule>
+
+# ---- Kompression -------------------------------------------------------
+# Das HTML traegt CSS und JS inline (~240 KB); gzip drueckt es auf rund
+# ein Viertel. Videos/Bilder sind schon komprimiert und bleiben aussen vor.
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript image/svg+xml
+</IfModule>
+
+# ---- Kleinigkeiten -----------------------------------------------------
+AddDefaultCharset utf-8
+<IfModule mod_mime.c>
+  AddType font/woff .woff
+  AddType video/mp4 .mp4
+</IfModule>
+
+# Nach dem Upload pruefen (beides muss stimmen, sonst beim Hoster nachhaken):
+#   curl -sI --compressed https://<domain>/ausbildung/ | grep -i content-encoding
+#     -> "gzip" oder "br"
+#   curl -sI -H 'Range: bytes=0-99' https://<domain>/ausbildung/assets/img/intro.mp4
+#     -> "HTTP/... 206" mit "Content-Range" (sonst spielt iOS Safari KEIN Video)
+#
+# Der QR-Code sollte NICHT direkt auf /ausbildung/ zeigen, sondern auf eine
+# kurze Weiterleitung, die man spaeter umziehen kann, ohne Plakate neu zu
+# drucken. Die gehoert in die .htaccess des WEBROOTS (nicht hier):
+#   Redirect 302 /azubi /ausbildung/
