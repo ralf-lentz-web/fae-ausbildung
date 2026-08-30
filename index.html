@@ -2606,8 +2606,8 @@ html.static .wipe{clip-path:inset(0 0 0 0 round var(--radius))}
               Julia auf WhatsApp fragen
             </button>
             <div class="wa__feld" id="waFeld">
-              <a href="tel:+4915140255855">+49&nbsp;151&nbsp;40255855</a>
-              <span>Julias Nummer. Speichern, WhatsApp öffnen, schreiben – sie antwortet innerhalb von 24&nbsp;Stunden.</span>
+              <a href="https://wa.me/4915140255855?text=Hallo%20Julia%2C%20ich%20habe%20eine%20Frage%20zur%20Ausbildung%20bei%20FAE." target="_blank" rel="noopener">+49&nbsp;151&nbsp;40255855</a>
+              <span>Tipp auf die Nummer, dann öffnet sich WhatsApp. Julia antwortet innerhalb von 24&nbsp;Stunden.</span>
             </div>
           </div>
         </div>
@@ -3287,8 +3287,8 @@ html.static .wipe{clip-path:inset(0 0 0 0 round var(--radius))}
               per Mail</a>
           </div>
           <div class="wa__feld wa__feld--hell" id="waFeldFragen">
-            <a href="tel:+4915140255855">+49&nbsp;151&nbsp;40255855</a>
-            <span>Julias Nummer. Speichern, WhatsApp öffnen, schreiben – sie antwortet innerhalb von 24&nbsp;Stunden.</span>
+            <a href="https://wa.me/4915140255855?text=Hallo%20Julia%2C%20ich%20habe%20eine%20Frage%20zur%20Ausbildung%20bei%20FAE." target="_blank" rel="noopener">+49&nbsp;151&nbsp;40255855</a>
+            <span>Tipp auf die Nummer, dann öffnet sich WhatsApp. Julia antwortet innerhalb von 24&nbsp;Stunden.</span>
           </div>
         </div>
       </div>
@@ -3366,8 +3366,8 @@ html.static .wipe{clip-path:inset(0 0 0 0 round var(--radius))}
               <i class="arr" aria-hidden="true">→</i>
             </button>
             <div class="wa__feld" id="waFeldWahl">
-              <a href="tel:+4915140255855">+49&nbsp;151&nbsp;40255855</a>
-              <span>Julias Nummer. Speichern, WhatsApp öffnen, schreiben – sie antwortet innerhalb von 24&nbsp;Stunden.</span>
+              <a href="https://wa.me/4915140255855?text=Hallo%20Julia%2C%20ich%20habe%20eine%20Frage%20zur%20Ausbildung%20bei%20FAE." target="_blank" rel="noopener">+49&nbsp;151&nbsp;40255855</a>
+              <span>Tipp auf die Nummer, dann öffnet sich WhatsApp. Julia antwortet innerhalb von 24&nbsp;Stunden.</span>
             </div>
 
             <a class="wahl__knopf wahl__knopf--klar"
@@ -4090,25 +4090,32 @@ const MAIL_ZIEL     = 'PERSPEKTIVEN@fae.energy';
 /* CRLF statt \n: Outlook bricht bei einfachem %0A die Zeilen nicht um. */
 const Z = '\r\n';
 
-/* Der Hinweis aufs Zeugnis steht bewusst VOR den Feldern. Wer die Mail
-   oeffnet und zuerst eine Liste von Angaben sieht, macht sie wieder zu –
-   die Entwarnung muss kommen, bevor die Arbeit anfaengt. */
+/* Die Vorlage ist in der Sprache der Seite geschrieben, nicht in
+   Behoerdendeutsch: der Bewerber ist fuenfzehn und schreibt keine
+   Anschreiben. Ein Text, der steifer klingt als er selbst, wird geloescht
+   und neu getippt – oder die Mail wird gar nicht erst abgeschickt.
+
+   Der Hinweis aufs Zeugnis steht weiterhin VOR den Feldern: wer die Mail
+   oeffnet und zuerst eine Liste von Angaben sieht, macht sie wieder zu.
+   Die Entwarnung muss kommen, bevor die Arbeit anfaengt. */
 const MAIL_BEWERBUNG = [
   'Hallo Julia,', '',
-  'ich möchte mich bei FAE bewerben.', '',
-  'Ein Foto vom letzten Zeugnis reicht – einfach mit dem Handy',
-  'abfotografieren und an diese Mail anhängen. Ein Scan muss es nicht sein.', '',
+  'ich hab eure Seite gesehen und will mich bewerben.', '',
+  'Mein letztes Zeugnis häng ich als Handyfoto an – das reicht ja bei euch.', '',
+  'Kurz zu mir:',
   'Name:', 'Alter:', 'Schule:', 'Telefon:', 'E-Mail:',
-  'Das möchte ich bei euch machen:', '',
+  'Das will ich bei euch machen:', '',
   'Viele Grüße'
 ].join(Z);
 
 const MAIL_PRAKTIKUM = [
   'Hallo Julia,', '',
-  'ich möchte gern ein Schülerpraktikum bei FAE machen.', '',
-  'Ein Zeugnis brauche ich dafür nicht mitzuschicken.', '',
+  'ich würde bei euch gern ein Schülerpraktikum machen.',
+  'Ein Zeugnis brauche ich dafür ja nicht.', '',
+  'Kurz zu mir:',
   'Name:', 'Alter:', 'Schule:', 'Telefon:', 'E-Mail:',
-  'Wunschzeitraum:', 'Das interessiert mich besonders:', '',
+  'Wann es bei mir passen würde:',
+  'Das interessiert mich besonders:', '',
   'Viele Grüße'
 ].join(Z);
 
@@ -4126,10 +4133,15 @@ for (const a of document.querySelectorAll('a[data-mail]')){
   a.href = mailAdresse(betreff, a.dataset.mail === 'praktikum' ? MAIL_PRAKTIKUM : MAIL_BEWERBUNG);
 }
 
-/* ---- WhatsApp: jeder Knopf klappt Julias Nummer auf und wieder zu.
-   Bewusst kein wa.me-Link mehr: der schickt den Besucher ueber einen
-   Meta-Server, bevor er ueberhaupt entschieden hat zu schreiben. Die
-   Nummer steht da, den Rest macht er in seiner App. */
+/* ---- WhatsApp: jeder Knopf klappt Julias Nummer auf und wieder zu,
+   und die Nummer selbst oeffnet WhatsApp.
+
+   Der wa.me-Link laeuft ueber einen Meta-Server. Das ist hier vertretbar,
+   weil er erst nach ZWEI bewussten Schritten erreicht wird – Knopf tippen,
+   dann Nummer tippen. Frueher lag er direkt auf dem Knopf und schickte
+   jeden dorthin, der nur nachsehen wollte, wie man Kontakt aufnimmt.
+   Ein reiner tel:-Verweis war die Gegenprobe und half nicht: der bietet
+   nur an anzurufen, und genau darum geht es an dieser Stelle nicht. */
 for (const knopf of document.querySelectorAll('.wa__knopf')){
   const feld = document.getElementById(knopf.getAttribute('aria-controls'));
   if (!feld) continue;
