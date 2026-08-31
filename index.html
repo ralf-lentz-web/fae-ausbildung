@@ -685,15 +685,6 @@ ul{list-style:none}
 .intro__phrase .ph-sub{font-size:clamp(15px,1.5vw,19px);color:#dfe2e6;margin-top:12px;line-height:1.5}
 .intro__phrase .ph-ort{display:block;margin-top:7px;
   font-size:.85em;color:#adb3bc;letter-spacing:.01em}
-/* Kein backdrop-filter: vier Pillen ueber laufendem Video kosteten pro Bild
-   je einen Weichzeichner-Durchgang – dieselbe Rechnung wie bei den
-   Glaspillen der Karriereleiter (V27). Ein etwas dichterer Grund tut es. */
-.ph-merkmale{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;
-  margin-top:15px;list-style:none;padding:0}
-.ph-merkmale li{font-family:var(--font-body);font-size:12.5px;font-weight:700;
-  color:#fff;background:rgba(12,14,18,.55);
-  border:1px solid rgba(255,255,255,.34);border-radius:999px;padding:6px 13px;
-  letter-spacing:.01em;white-space:nowrap}
 .intro__phrase .ph-medal{display:inline-grid;place-items:center;width:52px;height:52px;border-radius:13px;
   background:linear-gradient(135deg,var(--pink),var(--pink-deep));color:#fff;margin-bottom:14px;
   box-shadow:0 0 30px rgba(223,9,78,.5)}
@@ -1403,23 +1394,28 @@ html.static .kino__fg,body.reduced .kino__fg{position:absolute;opacity:.5}
    eigenen Verlauf hatte. Ohne den zeigen alle drei den Body-Verlauf, und
    der ist `background-attachment:fixed` – er wandert beim Scrollen unter
    der Sektion hindurch, ein fester Fuellton waere nach 200 px daneben.
-   Die Marken bleiben deshalb fast durchsichtig (`rgba(255,255,255,.05)`);
-   sichtbar sind im Wesentlichen die beiden versetzten Schatten, und die
-   stimmen auf jedem Untergrund.
+   Die Marken tragen deshalb nur einen flachen hellen Schleier; der stimmt
+   auf jedem Untergrund, weil er keine Farbe trifft, sondern aufhellt.
+
+   Zur Staerke: die Werte stammten aus dem Vorschau-Blatt, wo die Marken in
+   einen passenden Grundton GEFUELLT waren und dadurch als Flaechen lasen.
+   Hier tragen sie nur Schleier und Schatten – dieselben Zahlen ergaben am
+   Handy praktisch nichts Sichtbares. Schleier .05 -> .11, Schatten
+   .36/.13 -> .58/.22.
 
    Das overflow:hidden sitzt am Wrapper, NICHT an der Sektion: der Faecher
    im Berufe-Bereich arbeitet mit 3D-Transformationen, und ein Clip auf der
    Sektion haette die aufgefaecherten Karten beschnitten. */
 .grundmuster{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
 .grundmuster__relief{position:absolute;inset:0;
-  filter:drop-shadow(0 1px 0 rgba(255,255,255,.36))
-         drop-shadow(0 -1px 0 rgba(34,40,30,.13))}
+  filter:drop-shadow(0 1px 0 rgba(255,255,255,.58))
+         drop-shadow(0 -1px 0 rgba(34,40,30,.22))}
 /* Die Kachel ist NICHT die nackte Wortmarke, sondern fae-relief-kachel.png:
    dieselbe Marke mit transparentem Rand ringsum. Eine randlos beschnittene
    Marke kachelt Kante an Kante – daraus wurde ein Kratzmuster, in dem man
    kein Logo mehr erkannte. Die Luft in der Kachel ist der Abstand. */
 .grundmuster__relief i{position:absolute;inset:-70px;display:block;
-  background:rgba(255,255,255,.05);
+  background:rgba(255,255,255,.11);
   -webkit-mask:url('assets/img/fae-relief-kachel.png') 0 0/84px 32px repeat;
           mask:url('assets/img/fae-relief-kachel.png') 0 0/84px 32px repeat;
   transform:rotate(-6deg) scale(1.14)}
@@ -1807,73 +1803,132 @@ h2{font-family:var(--font-display);font-weight:800;font-size:clamp(1.5rem,3.4vw,
    braucht eine feste, gleiche Hoehe, sonst tanzt die Reihe. Bei zehn
    Elementen mit Bild ist eine Hoehen-Transition zudem billiger als zehn
    Grid-Neuberechnungen pro Frame. */
-.lamellen{position:relative;display:grid;gap:0;border-radius:var(--radius);
-  overflow:hidden;background:var(--stage);
-  box-shadow:0 26px 60px -34px rgba(var(--sh),.85)}
-/* Marken-Rahmen um den ganzen Stapel: haelt die zehn Balken als ein
-   Objekt zusammen, statt sie als lose Liste stehen zu lassen. */
-.lamellen::after{content:"";position:absolute;inset:0;z-index:5;pointer-events:none;
-  border-radius:var(--radius);padding:2px;
-  background:linear-gradient(150deg,var(--pink),rgba(255,255,255,.15) 42%,var(--green));
-  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
-          mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
-  -webkit-mask-composite:xor;mask-composite:exclude}
+/* ---- Referenzen: Kartenstapel ---------------------------------------
+   Zehn Karten liegen als Deck uebereinander, die naechsten schauen leicht
+   verdreht heraus. Die oberste wird mit Schwung aus dem Bild geworfen, der
+   Stapel rueckt federnd nach, die geworfene legt sich unsichtbar unten
+   wieder ein – ein Kreislauf ohne Anfang und Ende.
 
-.lamelle{position:relative;display:block;width:100%;padding:0;border:0;
-  overflow:hidden;cursor:pointer;background:var(--stage);
-  height:52px;transition:height .5s cubic-bezier(.22,1,.36,1);
-  -webkit-tap-highlight-color:transparent}
-.lamelle + .lamelle{box-shadow:0 -1px 0 rgba(255,255,255,.13)}
-.lamelle.ist-auf{height:clamp(210px,52vw,290px)}
-/* Geschlossen zeigt der Streifen die Bildmitte, offen das ganze Motiv. */
-.lamelle img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-  object-position:50% 46%;transition:filter .5s var(--ease),transform .6s var(--ease)}
-.lamelle:not(.ist-auf) img{filter:brightness(.4) saturate(.5)}
-.lamelle.ist-auf img{transform:scale(1.03)}
-/* Marken-Klemme am linken Rand des offenen Balkens – dieselbe wie an den
-   Fragen-Riegeln, damit die Seite eine Sprache spricht. */
-.lamelle::before{content:"";position:absolute;left:0;top:0;bottom:0;width:0;
-  z-index:4;background:linear-gradient(180deg,var(--pink),var(--green));
-  transition:width .5s cubic-bezier(.22,1,.36,1)}
-.lamelle.ist-auf::before{width:4px}
+   Vorgaenger war ein Lamellen-Stapel: geschlossene Balken auf brightness(.4)
+   mit dem Text in einem schwarzen Verlauf ueber dem unteren Bilddrittel.
+   Beides ist weg – das Bild steht frei, der Text auf weisser Karte darunter.
 
-.lamelle__zeile{position:absolute;left:0;right:0;bottom:0;z-index:2;
-  display:grid;grid-template-columns:auto minmax(0,1fr);
-  align-items:baseline;gap:4px 12px;
-  padding:26px 16px 12px;text-align:left;
-  background:linear-gradient(180deg,transparent,rgba(8,9,12,.92) 58%)}
-/* Die Nummer traegt die Reihe: zehn Balken ohne Zaehlung sind eine Wand. */
-.lamelle__nr{font-family:var(--font-body);font-size:12px;font-weight:850;
-  letter-spacing:.08em;font-variant-numeric:tabular-nums;
-  color:rgba(255,255,255,.5);transition:color .4s var(--ease)}
-.lamelle.ist-auf .lamelle__nr{color:var(--green-onphoto)}
-.lamelle__kopf{min-width:0}
-.lamelle__ort{display:block;font-size:9.5px;font-weight:800;letter-spacing:.16em;
-  text-transform:uppercase;color:var(--green-onphoto);margin-bottom:1px;
-  opacity:0;max-height:0;overflow:hidden;
-  transition:opacity .4s var(--ease),max-height .4s var(--ease)}
-.lamelle.ist-auf .lamelle__ort{opacity:1;max-height:2em}
-.lamelle__titel{display:block;font-family:var(--font-body);font-size:14.5px;
-  font-weight:800;color:#fff;line-height:1.25;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-  transition:font-size .4s var(--ease)}
-.lamelle.ist-auf .lamelle__titel{font-size:clamp(17px,4.4vw,22px);
-  white-space:normal;letter-spacing:-.01em;
-  text-shadow:0 0 24px rgba(0,0,0,.9)}
-/* Der Satz steht nur im offenen Balken. display:none statt Hoehe 0, weil
-   ein zusammengeschobener Text sonst durch den Verlauf schimmert. */
-.lamelle__satz{grid-column:2;font-size:13.5px;line-height:1.45;color:#e6e9ee;
-  margin-top:4px;display:none}
-.lamelle.ist-auf .lamelle__satz{display:block}
-.lamelle:focus-visible{outline:3px solid var(--pink);outline-offset:-3px;z-index:6}
+   Bewegt wird ausschliesslich transform und opacity. */
+.refdeck__rahmen{padding-top:46px;padding-bottom:4px}
+/* min-height als Boden: die Karten liegen absolut im Deck, und ohne
+   aspect-ratio (aeltere WebViews) waere es null Pixel hoch – der Stapel
+   waere schlicht weg. Dieselbe Falle wie beim Bild im Fragen-Fuss. */
+.refdeck{position:relative;aspect-ratio:1100/745;min-height:200px;
+  touch-action:pan-y;user-select:none;-webkit-user-select:none;
+  border-radius:var(--radius);cursor:grab}
+.refdeck:active{cursor:grabbing}
+.refdeck:focus-visible{outline:3px solid var(--pink);outline-offset:6px}
+
+.refkarte{position:absolute;inset:0;margin:0;background:var(--panel);
+  border-radius:var(--radius);padding:8px;box-shadow:var(--shadow-card);
+  backface-visibility:hidden;
+  transition:transform .55s cubic-bezier(.3,1.35,.45,1),opacity .35s ease}
+/* will-change nur waehrend der Bewegung. Dauerhaft auf allen zehn Karten
+   gesetzt hielt es zehn Compositor-Ebenen wach – gemessen 3 Aussetzer ueber
+   33 ms beim Scrollen durch die Sektion, wo sonst keiner ist. Dieselbe
+   Lehre wie bei den Schein-Ebenen: die Ebene nur bestellen, wenn sie
+   gebraucht wird. */
+.refdeck.zieht .refkarte,.refkarte.fliegt{will-change:transform,opacity}
+.refkarte.fliegt{transition:transform .45s cubic-bezier(.3,.65,.35,1),
+  opacity .28s ease .15s}
+.refkarte.ohne-anim{transition:none!important}
+.refdeck.zieht .refkarte{transition:none}
+.refkarte img{display:block;width:100%;height:100%;object-fit:cover;
+  border-radius:var(--radius-s);pointer-events:none;-webkit-user-drag:none}
+/* Zahlen in der Textschrift: Orbitrons durchgestrichene Null macht aus
+   „01" ein „Ø1". Gilt hier wie bei der 180 und der Rufnummer. */
+.refkarte__nr{position:absolute;top:16px;right:16px;
+  font-family:var(--font-body);font-weight:800;font-size:11px;
+  letter-spacing:.08em;font-variant-numeric:tabular-nums;color:var(--ink);
+  background:var(--panel);border-radius:8px;padding:4px 7px;
+  box-shadow:0 1px 3px rgba(var(--sh),.22)}
+/* Ruhelage ohne JavaScript – entspricht dem ersten Durchlauf des Treibers. */
+.refkarte:nth-child(1){z-index:10}
+.refkarte:nth-child(2){z-index:9;transform:translate3d(0,-14px,0) rotate(-2.6deg) scale(.952)}
+.refkarte:nth-child(3){z-index:8;transform:translate3d(0,-27px,0) rotate(2.4deg) scale(.906)}
+.refkarte:nth-child(n+4){z-index:1;opacity:0;transform:translate3d(0,-39px,0) rotate(-3.4deg) scale(.862)}
+
+.refinfo{margin-top:17px;background:var(--panel);border-radius:var(--radius);
+  box-shadow:var(--shadow-card);padding:17px 19px 19px}
+.refinfo__inner{transition:opacity .26s ease,transform .26s ease}
+.refinfo__inner.wechselt{opacity:0;transform:translate3d(0,8px,0);
+  transition-duration:.14s}
+.refinfo__top{display:flex;align-items:baseline;gap:9px;
+  border-bottom:1px solid var(--line);padding-bottom:10px}
+.refinfo__nr{font-family:var(--font-body);font-weight:850;font-size:18px;
+  font-variant-numeric:tabular-nums;color:var(--pink-text);letter-spacing:.02em}
+.refinfo__von{font-family:var(--font-body);font-weight:600;font-size:11px;
+  font-variant-numeric:tabular-nums;color:var(--muted);opacity:.65}
+.refinfo__ort{margin-left:auto;font-size:10px;font-weight:800;
+  letter-spacing:.15em;text-transform:uppercase;color:var(--green-text)}
+.refinfo__titel{font-family:var(--font-body);font-weight:800;font-size:17px;
+  line-height:1.3;letter-spacing:-.01em;color:var(--ink);margin-top:11px}
+.refinfo__satz{margin-top:7px;font-size:14.5px;line-height:1.55;
+  color:var(--muted);min-height:calc(1.55em * 3)}
+
+.refsteuer{margin-top:15px;display:flex;align-items:center;gap:8px}
+.refpfeil{flex:none;width:44px;height:44px;border:0;border-radius:50%;
+  background:var(--panel);color:var(--ink);box-shadow:var(--shadow-card);
+  display:grid;place-items:center;cursor:pointer;
+  transition:transform .2s cubic-bezier(.3,1.4,.5,1)}
+.refpfeil:hover{transform:translateY(-2px)}
+.refpfeil:active{transform:scale(.92)}
+.refpunkte{display:flex;flex:1;min-width:0;justify-content:center}
+.refpunkt{flex:1 1 24px;max-width:30px;min-width:0;height:42px;border:0;
+  background:none;cursor:pointer;display:grid;place-items:center;
+  border-radius:10px;padding:0}
+.refpunkt::before{content:"";width:7px;height:7px;border-radius:50%;
+  background:rgba(20,22,28,.28);
+  transition:transform .3s cubic-bezier(.3,1.5,.5,1)}
+.refpunkt.an::before{background:var(--pink);transform:scale(1.7)}
+.refpfeil:focus-visible,.refpunkt:focus-visible{
+  outline:3px solid var(--pink);outline-offset:2px}
+.refhinweis{margin-top:9px;text-align:center;font-size:12px;
+  color:var(--muted);opacity:.62}
+
+/* Die Lese-Fassung ist zugleich die DATENQUELLE des Treibers: er liest Ort,
+   Titel und Satz aus diesen Elementen, statt sie ein zweites Mal im Skript
+   zu fuehren. Aendern heisst also: hier aendern, sonst nirgends. Ohne
+   JavaScript bleibt sie stehen und traegt alle zehn Referenzen als Text. */
+.refliste{list-style:none;margin-top:16px;display:grid;gap:9px}
+.refliste li{background:var(--panel);border:1px solid var(--line);
+  border-radius:var(--radius-s);padding:12px 14px}
+.refliste b{display:block;font-size:15px;font-weight:800;color:var(--ink)}
+.refliste i{display:block;font-style:normal;font-size:10px;font-weight:800;
+  letter-spacing:.15em;text-transform:uppercase;color:var(--green-text);
+  margin-bottom:3px}
+.refliste span{display:block;font-size:13.5px;line-height:1.5;
+  color:var(--muted);margin-top:4px}
+.hat-js .refliste{display:none}
+
+@media(prefers-reduced-motion:reduce){
+  .refkarte,.refkarte.fliegt,.refinfo__inner,.refpunkt::before,.refpfeil{
+    transition:none!important}
+}
+
+.stadtwand__ende{display:grid;grid-template-columns:auto minmax(0,1fr);
+  align-items:center;gap:2px 13px;margin-top:13px;
+  padding:14px 16px;border-radius:14px;text-decoration:none;
+  background:var(--panel);border:1px solid var(--line);
+  box-shadow:var(--shadow-card);
+  transition:transform .3s var(--ease),box-shadow .3s var(--ease)}
+.stadtwand__ende:hover{transform:translateY(-2px)}
+.stadtwand__ende i{grid-row:span 2;width:10px;height:10px;border-radius:99px;
+  background:var(--green);box-shadow:0 0 0 4px rgba(78,157,51,.16)}
+.stadtwand__ende b{font-family:var(--font-body);font-size:15px;font-weight:800;
+  color:var(--ink);line-height:1.3}
+.stadtwand__ende small{font-size:12.5px;font-weight:600;color:var(--muted);
+  line-height:1.35}
+.stadtwand__ende:focus-visible{outline:3px solid var(--pink);outline-offset:3px}
+
 
 /* Ohne JS, im Audit-Modus und bei reduzierter Bewegung stehen alle zehn
    offen: geschlossene Balken waeren dort ein Stapel unlesbarer Streifen. */
-html.static .lamelle,body.reduced .lamelle{height:clamp(210px,52vw,290px)}
-html.static .lamelle img,body.reduced .lamelle img{filter:none}
-html.static .lamelle__satz,body.reduced .lamelle__satz{display:block}
-html.static .lamelle__ort,body.reduced .lamelle__ort{opacity:1;max-height:2em}
-html.static .lamelle::before,body.reduced .lamelle::before{width:4px}
 
 
 /* Für Vorleseprogramme. */
@@ -1952,14 +2007,18 @@ html.static .lamelle::before,body.reduced .lamelle::before{width:4px}
    Auf hellem Grund glüht dort nicht mehr Lava, sondern das Marken-Band
    selbst – Grün links, Pink rechts. Der Riegel bricht auf und darunter
    liegt FAE. */
+/* Dasselbe Band wie ueberall sonst auf der Seite. Hier stand frueher ein
+   von Hand gebauter Verlauf (Gruen-Gelb-Pink) mit einem hellen Streifen
+   darueber – die Sorge war, ein Foto zerfalle auf 17 px Hoehe. Es zerfaellt
+   nicht, es sah nur anders aus als jedes andere Band der Seite.
+
+   Die Einpassung: der Spalt ist 17 px hoch und sitzt konstant 12,5 px ueber
+   der Unterkante der Kachel (die Haelften klippen mit festen Pixelwerten,
+   unabhaengig von der Kachelhoehe). Ein 26-px-Band an der Unterkante
+   ausgerichtet deckt ihn damit bei jeder Fragenhoehe mittig ab – dieselben
+   26 px wie .streifenband, der Fuss und die Sektionskanten. */
 .riegel__spalt{position:absolute;inset:0;z-index:0;border-radius:12px;overflow:hidden;
-  background:linear-gradient(90deg,var(--green) 0%,#8cc24a 30%,#d8b23a 50%,
-    var(--pink) 76%,#ff3d72 100%)}
-/* Ein heller Streifen laeuft mittig durch – das gibt dem Band Tiefe, ohne
-   dass ein Foto auf 17px Hoehe zerfaellt. */
-.riegel__spalt::after{content:"";position:absolute;inset:0;
-  background:linear-gradient(180deg,rgba(255,255,255,.42) 0%,transparent 42%,
-    rgba(0,0,0,.16) 100%)}
+  background:url('assets/img/zwischenstreifen.webp') center bottom/100% 26px no-repeat}
 /* Die zwei Hälften derselben Fläche. clip-path schneidet oben und unten – im
    Ruhezustand stoßen sie fugenlos aneinander und wirken wie eine Platte. */
 .riegel__h{position:absolute;inset:0;z-index:1;border-radius:12px;
@@ -2087,8 +2146,13 @@ html.static .lamelle::before,body.reduced .lamelle::before{width:4px}
 @media(max-width:760px){
   .fragen__fuss{grid-template-columns:1fr}
   /* 4/3 statt 16/9: das Hochformat-Original verliert im breiten Ausschnitt
-     die Köpfe der drei Personen. */
-  .fragen__fuss figure{min-height:0;aspect-ratio:4/3}
+     die Köpfe der drei Personen.
+
+     min-height bleibt stehen statt auf 0 zu fallen: das Bild liegt absolut
+     im figure, und ohne aspect-ratio (aeltere Androids, WebViews) haette
+     die Kachel Hoehe 0 – das Bild waere schlicht weg. Wo aspect-ratio
+     greift, gewinnt ohnehin der groessere Wert. */
+  .fragen__fuss figure{min-height:190px;aspect-ratio:4/3}
   .fragen__fuss figure::after{top:auto;left:0;right:0;bottom:0;width:auto;height:5px}
 }
 
@@ -2258,6 +2322,10 @@ html.static .wipe{clip-path:inset(0 0 0 0 round var(--radius))}
   /* Ohne JavaScript baut sich der Faecher nicht auf – dann ist diese Liste
      die einzige Stelle, an der die sieben Wege ueberhaupt stehen. */
   .nojs-berufe{display:grid}
+  /* Ohne Treiber baut niemand die Punkte, und die Pfeile schalten nichts:
+     die Steuerung waere eine Attrappe. Der Stapel zeigt die erste Karte
+     (CSS-Ruhelage), alle zehn Referenzen stehen als Text in der .refliste. */
+  .refsteuer,.refhinweis{display:none}
   /* Kein .aktiv ohne JavaScript – der Strich steht von Anfang an. */
   .intro__phrase .volt::after,.kino__gross .volt::after{transform:none;animation:none}
   .kino__fg{position:absolute;opacity:.5}
@@ -2329,13 +2397,14 @@ html.static .wipe{clip-path:inset(0 0 0 0 round var(--radius))}
       </div>
       <div class="intro__phrase">
         <p class="ph-big">Ausbildung &amp; duales <span class="volt">Studium</span></p>
-        <p class="ph-sub">Elektroniker&nbsp;· Informationselektroniker&nbsp;· Technischer&nbsp;Systemplaner
+        <!-- Hier standen die Berufsbezeichnungen und drei Merkmal-Pillen.
+             „Informationselektroniker" sagt einem Fuenfzehnjaehrigen nichts –
+             der Beruf wird weiter unten im Faecher ohnehin ausfuehrlich
+             erklaert. An dieser Stelle zaehlt, was man tut, nicht wie es
+             heisst. Die drei Merkmale laufen weiter in der Laufschrift. -->
+        <p class="ph-sub">Bring Dresden zum Leuchten – Strom in die Gebäude,
+          Licht in die Räume, Technik ans Laufen.
           <span class="ph-ort">bei FAE in Heidenau bei Dresden</span></p>
-        <ul class="ph-merkmale">
-          <li>Eigene Lehrwerkstatt</li>
-          <li>Patenprogramm</li>
-          <li>Übernahmegarantie</li>
-        </ul>
       </div>
       <div class="intro__phrase">
         <span class="ph-medal" aria-hidden="true">
@@ -2681,147 +2750,76 @@ html.static .wipe{clip-path:inset(0 0 0 0 round var(--radius))}
         </p>
       </div>
 
-      <!-- Zehn Lamellen. Genau eine ist offen – wie eine Radiogruppe.
-           Das Markup steht bewusst vollstaendig im HTML und wird nicht per
-           JS erzeugt: so tragen die Referenzen auch ohne JavaScript und
-           fuer Suchmaschinen. Das Skript schaltet nur den Zustand um.
-           Inhalt aendern heisst: hier aendern, sonst nirgends.
+      <!-- Kartenstapel. Zehn Karten uebereinander, die oberste wird
+           weggewischt. Der Treiber liest Ort, Titel und Satz aus der
+           .refliste weiter unten – die ist zugleich die Fassung fuer
+           Besucher ohne JavaScript. Inhalt aendern heisst: dort aendern.
 
-           Die Eintraege 06-10 sind PLATZHALTER – zu ihnen liegen weder
-           Foto noch bestaetigter Text vor. Erkennbar auch im Bild. -->
-      <div class="lamellen rv" data-d="3" id="lamellen"
-           role="group" aria-label="Referenzprojekte in Dresden und Umgebung">
-        <button class="lamelle ist-auf" type="button" data-i="0"
-                aria-expanded="true">
-          <img src="assets/img/ref-wtc.jpg" width="1100" height="745"
-               loading="lazy" decoding="async" alt="Das World Trade Center Dresden bei Nacht mit leuchtenden roten und grünen Lichtringen">
-          <span class="lamelle__zeile">
-            <span class="lamelle__nr">01</span>
-            <span class="lamelle__kopf">
-              <span class="lamelle__ort">Friedrichstadt</span>
-              <span class="lamelle__titel">World Trade Center Dresden</span>
-            </span>
-            <span class="lamelle__satz">Büros, Läden, Lichtringe: Das WTC leuchtet jeden Abend über der Stadt – die Ringe kennst du aus der Skyline.</span>
-          </span>
+           ══ ORTSANGABEN PRUEFEN ══ Die Stadtteile der sechs neu
+           aufgenommenen Referenzen (02-04, 06, 08, 10) sind nach bestem
+           Wissen gesetzt, aber nicht aus Projektunterlagen belegt. -->
+      <div class="refdeck__rahmen rv" data-d="3">
+        <div class="refdeck" id="refDeck" role="group" tabindex="0"
+             aria-roledescription="Kartenstapel"
+             aria-label="Zehn Referenzprojekte – wischen oder Pfeiltasten benutzen">
+          <figure class="refkarte"><img src="assets/img/ref-wtc.jpg" width="1100" height="745"
+            decoding="async" draggable="false" alt="Das World Trade Center Dresden bei Nacht mit leuchtenden roten und grünen Lichtringen"><span class="refkarte__nr" aria-hidden="true">01</span></figure>
+          <figure class="refkarte"><img src="assets/img/ref-galerie.jpg" width="1100" height="745"
+            decoding="async" draggable="false" alt="Die Gemäldegalerie Alte Meister im Dresdner Zwinger im Abendlicht"><span class="refkarte__nr" aria-hidden="true">02</span></figure>
+          <figure class="refkarte"><img src="assets/img/ref-zwinger.jpg" width="1100" height="745"
+            decoding="async" draggable="false" alt="Die Bogengalerie des Dresdner Zwingers mit Springbrunnen im Innenhof"><span class="refkarte__nr" aria-hidden="true">03</span></figure>
+          <figure class="refkarte"><img src="assets/img/ref-taschenberg.jpg" width="1100" height="745"
+            decoding="async" draggable="false" alt="Das Hotel Taschenbergpalais Kempinski gegenüber dem Dresdner Schloss am Abend"><span class="refkarte__nr" aria-hidden="true">04</span></figure>
+          <figure class="refkarte"><img src="assets/img/ref-kaufpark.jpg" width="1100" height="745"
+            loading="lazy" decoding="async" draggable="false" alt="Luftaufnahme des Kaufpark Dresden in Nickern am Abend"><span class="refkarte__nr" aria-hidden="true">05</span></figure>
+          <figure class="refkarte"><img src="assets/img/ref-mensa.jpg" width="1100" height="745"
+            loading="lazy" decoding="async" draggable="false" alt="Luftaufnahme der Neuen Mensa der TU Dresden an der Bergstraße"><span class="refkarte__nr" aria-hidden="true">06</span></figure>
+          <figure class="refkarte"><img src="assets/img/ref-fraunhofer.jpg" width="1100" height="745"
+            loading="lazy" decoding="async" draggable="false" alt="Das Fraunhofer-Institut in der Dresdner Südvorstadt"><span class="refkarte__nr" aria-hidden="true">07</span></figure>
+          <figure class="refkarte"><img src="assets/img/ref-arena.jpg" width="1100" height="745"
+            loading="lazy" decoding="async" draggable="false" alt="Die EnergieVerbund Arena in Dresden von außen"><span class="refkarte__nr" aria-hidden="true">08</span></figure>
+          <figure class="refkarte"><img src="assets/img/ref-mhm.jpg" width="1100" height="745"
+            loading="lazy" decoding="async" draggable="false" alt="Das Militärhistorische Museum Dresden mit dem Libeskind-Keil"><span class="refkarte__nr" aria-hidden="true">09</span></figure>
+          <figure class="refkarte"><img src="assets/img/ref-arbeitsagentur.jpg" width="1100" height="745"
+            loading="lazy" decoding="async" draggable="false" alt="Das Gebäude der Agentur für Arbeit Dresden am Abend mit erleuchteten Fenstern"><span class="refkarte__nr" aria-hidden="true">10</span></figure>
+        </div>
+      </div>
+
+      <div class="refinfo rv" data-d="4">
+        <div class="refinfo__inner" id="refInfo" aria-live="polite">
+          <p class="refinfo__top">
+            <span class="refinfo__nr" id="refNr">01</span>
+            <span class="refinfo__von">/ 10</span>
+            <span class="refinfo__ort" id="refOrt">Friedrichstadt</span>
+          </p>
+          <h3 class="refinfo__titel" id="refTitel">World Trade Center Dresden</h3>
+          <p class="refinfo__satz" id="refSatz">Büros, Läden, Lichtringe: Das WTC leuchtet jeden Abend über der Stadt – die Ringe kennst du aus der Skyline.</p>
+        </div>
+      </div>
+
+      <div class="refsteuer">
+        <button class="refpfeil" id="refPrev" type="button" aria-label="Vorherige Referenz">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M11.5 3.5 6 9l5.5 5.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
-        <button class="lamelle" type="button" data-i="1"
-                aria-expanded="false">
-          <img src="assets/img/ref-lka.jpg" width="1100" height="745"
-               loading="lazy" decoding="async" alt="Der Institutsneubau des Landeskriminalamts Sachsen in Dresden-Nord">
-          <span class="lamelle__zeile">
-            <span class="lamelle__nr">02</span>
-            <span class="lamelle__kopf">
-              <span class="lamelle__ort">Dresden-Nord</span>
-              <span class="lamelle__titel">Landeskriminalamt Sachsen</span>
-            </span>
-            <span class="lamelle__satz">Hier ermittelt Sachsen: der Institutsneubau des LKA – Technik, auf die im Ernstfall Verlass sein muss.</span>
-          </span>
-        </button>
-        <button class="lamelle" type="button" data-i="2"
-                aria-expanded="false">
-          <img src="assets/img/ref-kaufpark.jpg" width="1100" height="745"
-               loading="lazy" decoding="async" alt="Luftaufnahme des Kaufpark Dresden in Nickern am Abend">
-          <span class="lamelle__zeile">
-            <span class="lamelle__nr">03</span>
-            <span class="lamelle__kopf">
-              <span class="lamelle__ort">Nickern</span>
-              <span class="lamelle__titel">Kaufpark Dresden</span>
-            </span>
-            <span class="lamelle__satz">Ein Lichtermeer zum Einkaufen: die komplette Elektroinstallation kommt von uns – bis zur letzten Mastleuchte.</span>
-          </span>
-        </button>
-        <button class="lamelle" type="button" data-i="3"
-                aria-expanded="false">
-          <img src="assets/img/ref-fraunhofer.jpg" width="1100" height="745"
-               loading="lazy" decoding="async" alt="Das Fraunhofer-Institut in der Dresdner Südvorstadt">
-          <span class="lamelle__zeile">
-            <span class="lamelle__nr">04</span>
-            <span class="lamelle__kopf">
-              <span class="lamelle__ort">Südvorstadt</span>
-              <span class="lamelle__titel">Fraunhofer-Institut</span>
-            </span>
-            <span class="lamelle__satz">Spitzenforschung braucht ein Gebäude, das mitzieht – bis in jede Leitung und jeden Serverraum.</span>
-          </span>
-        </button>
-        <button class="lamelle" type="button" data-i="4"
-                aria-expanded="false">
-          <img src="assets/img/ref-mhm.jpg" width="1100" height="745"
-               loading="lazy" decoding="async" alt="Das Militärhistorische Museum Dresden mit dem Libeskind-Keil">
-          <span class="lamelle__zeile">
-            <span class="lamelle__nr">05</span>
-            <span class="lamelle__kopf">
-              <span class="lamelle__ort">Albertstadt</span>
-              <span class="lamelle__titel">Militärhistorisches Museum</span>
-            </span>
-            <span class="lamelle__satz">Weltberühmte Architektur mit dem Libeskind-Keil – und dahinter Gebäudetechnik nach Maß.</span>
-          </span>
-        </button>
-        <button class="lamelle" type="button" data-i="5"
-                aria-expanded="false">
-          <img src="assets/img/ref-platzhalter-6.jpg" width="1100" height="745"
-               loading="lazy" decoding="async" alt="Platzhalter für Referenzprojekt 06">
-          <span class="lamelle__zeile">
-            <span class="lamelle__nr">06</span>
-            <span class="lamelle__kopf">
-              <span class="lamelle__ort">Platzhalter</span>
-              <span class="lamelle__titel">Referenz 06</span>
-            </span>
-            <span class="lamelle__satz">Stadtteil, Projektname und Satz fehlen noch – bitte eintragen.</span>
-          </span>
-        </button>
-        <button class="lamelle" type="button" data-i="6"
-                aria-expanded="false">
-          <img src="assets/img/ref-platzhalter-7.jpg" width="1100" height="745"
-               loading="lazy" decoding="async" alt="Platzhalter für Referenzprojekt 07">
-          <span class="lamelle__zeile">
-            <span class="lamelle__nr">07</span>
-            <span class="lamelle__kopf">
-              <span class="lamelle__ort">Platzhalter</span>
-              <span class="lamelle__titel">Referenz 07</span>
-            </span>
-            <span class="lamelle__satz">Stadtteil, Projektname und Satz fehlen noch – bitte eintragen.</span>
-          </span>
-        </button>
-        <button class="lamelle" type="button" data-i="7"
-                aria-expanded="false">
-          <img src="assets/img/ref-platzhalter-8.jpg" width="1100" height="745"
-               loading="lazy" decoding="async" alt="Platzhalter für Referenzprojekt 08">
-          <span class="lamelle__zeile">
-            <span class="lamelle__nr">08</span>
-            <span class="lamelle__kopf">
-              <span class="lamelle__ort">Platzhalter</span>
-              <span class="lamelle__titel">Referenz 08</span>
-            </span>
-            <span class="lamelle__satz">Stadtteil, Projektname und Satz fehlen noch – bitte eintragen.</span>
-          </span>
-        </button>
-        <button class="lamelle" type="button" data-i="8"
-                aria-expanded="false">
-          <img src="assets/img/ref-platzhalter-9.jpg" width="1100" height="745"
-               loading="lazy" decoding="async" alt="Platzhalter für Referenzprojekt 09">
-          <span class="lamelle__zeile">
-            <span class="lamelle__nr">09</span>
-            <span class="lamelle__kopf">
-              <span class="lamelle__ort">Platzhalter</span>
-              <span class="lamelle__titel">Referenz 09</span>
-            </span>
-            <span class="lamelle__satz">Stadtteil, Projektname und Satz fehlen noch – bitte eintragen.</span>
-          </span>
-        </button>
-        <button class="lamelle" type="button" data-i="9"
-                aria-expanded="false">
-          <img src="assets/img/ref-platzhalter-10.jpg" width="1100" height="745"
-               loading="lazy" decoding="async" alt="Platzhalter für Referenzprojekt 10">
-          <span class="lamelle__zeile">
-            <span class="lamelle__nr">10</span>
-            <span class="lamelle__kopf">
-              <span class="lamelle__ort">Platzhalter</span>
-              <span class="lamelle__titel">Referenz 10</span>
-            </span>
-            <span class="lamelle__satz">Stadtteil, Projektname und Satz fehlen noch – bitte eintragen.</span>
-          </span>
+        <div class="refpunkte" id="refPunkte"></div>
+        <button class="refpfeil" id="refNext" type="button" aria-label="Nächste Referenz">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M6.5 3.5 12 9l-5.5 5.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
       </div>
+      <p class="refhinweis">Karten wischen – oder unten tippen</p>
+
+      <ul class="refliste" id="refListe">
+        <li data-ort="Friedrichstadt"><i>Friedrichstadt</i><b>World Trade Center Dresden</b><span>Büros, Läden, Lichtringe: Das WTC leuchtet jeden Abend über der Stadt – die Ringe kennst du aus der Skyline.</span></li>
+        <li data-ort="Zwinger"><i>Zwinger</i><b>Gemäldegalerie Alte Meister</b><span>Hier hängt Raffaels Sixtinische Madonna. Museumslicht muss Farben so zeigen, wie sie gemalt wurden – und darf nichts ausbleichen.</span></li>
+        <li data-ort="Zwinger"><i>Zwinger</i><b>Bogengalerie im Zwinger</b><span>Barock von 1728, heute Bühne für Konzerte und Feste. Technik in einem Denkmal heißt: sie muss da sein, ohne zu sehen zu sein.</span></li>
+        <li data-ort="Altstadt"><i>Altstadt</i><b>Taschenbergpalais Kempinski</b><span>Fünf Sterne gegenüber dem Schloss. Über 200 Zimmer, in denen Licht, Klima und Sicherheit rund um die Uhr laufen.</span></li>
+        <li data-ort="Nickern"><i>Nickern</i><b>Kaufpark Dresden</b><span>Ein Lichtermeer zum Einkaufen: die komplette Elektroinstallation kommt von uns – bis zur letzten Mastleuchte.</span></li>
+        <li data-ort="Südvorstadt"><i>Südvorstadt</i><b>Neue Mensa der TU Dresden</b><span>Mittags stehen hier Tausende Studenten an. Küche, Lüftung, Beleuchtung – der ganze Betrieb hängt an der Technik.</span></li>
+        <li data-ort="Südvorstadt"><i>Südvorstadt</i><b>Fraunhofer-Institut</b><span>Spitzenforschung braucht ein Gebäude, das mitzieht – bis in jede Leitung und jeden Serverraum.</span></li>
+        <li data-ort="Ostragehege"><i>Ostragehege</i><b>EnergieVerbund Arena</b><span>Eisfläche, Flutlicht, Anzeigetafel. Wenn hier der Strom stockt, steht das Spiel.</span></li>
+        <li data-ort="Albertstadt"><i>Albertstadt</i><b>Militärhistorisches Museum</b><span>Weltberühmte Architektur mit dem Libeskind-Keil – und dahinter Gebäudetechnik nach Maß.</span></li>
+        <li data-ort="Seevorstadt"><i>Seevorstadt</i><b>Agentur für Arbeit Dresden</b><span>Ein Haus, in dem täglich Hunderte Termine laufen. Beleuchtung, Netz und Sicherheitstechnik müssen einfach da sein.</span></li>
+      </ul>
 
       <a class="stadtwand__ende" href="#bewerben">
         <i aria-hidden="true"></i>
@@ -2872,7 +2870,12 @@ html.static .wipe{clip-path:inset(0 0 0 0 round var(--radius))}
         </div>
 
         <div class="kino__phrase">
-          <p class="kino__gross">Deine eigene Lehrwerkstatt.</p>
+          <!-- Vorher „Deine eigene Lehrwerkstatt." Die Werkstatt gehoert aber
+               nicht dem Azubi, sondern FAE – und „deine eigene" behauptet
+               denselben Besitz zweimal. Der Unterschied zu anderen Betrieben
+               ist, dass es hier ueberhaupt eine gibt; deshalb liegt die
+               Betonung auf „eigene". -->
+          <p class="kino__gross">Eine <span class="volt">eigene</span> Lehrwerkstatt.</p>
           <p class="kino__sub">Echte Übungswände im Haus: Leitungen ziehen, Dosen setzen,
             Verteiler aufbauen, messen. <b>Hier darf schiefgehen, was beim Kunden
             nicht schiefgehen darf.</b></p>
@@ -2887,9 +2890,13 @@ html.static .wipe{clip-path:inset(0 0 0 0 round var(--radius))}
         </div>
 
         <div class="kino__phrase kino__phrase--cta">
-          <p class="kino__gross">Du startest nie <span class="volt">allein</span>.</p>
-          <p class="kino__sub"><b>Du hast jetzt 180 neue Kollegen.</b> Ausbilder,
-            Pate und die anderen Azubis – vom ersten Tag an.</p>
+          <!-- 180 in der Textschrift, nicht in Orbitron: deren durchgestrichene
+               Null macht aus der 180 ein „18Ø". Bei der Rufnummer war das schon
+               einmal der Grund (siehe .wa__feld a) – und hier traegt die Zahl
+               die ganze Aussage. -->
+          <p class="kino__gross">Du hast jetzt<br><span class="volt"><span class="ziffern">180</span>&nbsp;Kollegen</span>.</p>
+          <p class="kino__sub">Ausbilder, Pate und die anderen Azubis – vom ersten
+            Tag an. <b>Du startest nie allein.</b></p>
           <div class="hero__ctas" style="margin-top:18px">
             <a class="btn btn--green" href="#bewerben">Komm ins Team <span class="arr">→</span></a>
           </div>
@@ -3277,8 +3284,13 @@ html.static .wipe{clip-path:inset(0 0 0 0 round var(--radius))}
            was zu sehen ist, der Zusatz sagt, wer Julia ist. -->
       <div class="fragen__fuss">
         <figure>
+          <!-- Bewusst kein loading="lazy": das Bild liegt absolut in einer
+               Kachel, deren Hoehe erst aus aspect-ratio entsteht. Sieht der
+               Lazy-Lader sie im Moment der Pruefung mit Hoehe 0, laedt er
+               das Bild nie nach – auf dem Handy war es dadurch weg. 236 KB
+               ganz unten auf der Seite sind den sicheren Auftritt wert. -->
           <img src="assets/img/szene-team.jpg" width="1031" height="1280"
-            loading="lazy" decoding="async"
+            decoding="async"
             alt="Auszubildende und Kollegen von FAE besprechen gemeinsam einen Gebäudeplan am Tisch">
           <figcaption>Planbesprechung im Büro in Heidenau</figcaption>
         </figure>
@@ -4658,44 +4670,228 @@ if (new URLSearchParams(location.search).has('offen')){
 <script>
 /* Eigener Block (siehe Naht oben): Referenzen und Fusszeile haengen nicht
    am Wohlergehen des Faechers. */
-/* ---------- Lamellen: welche Referenz ist offen ----------
-   Zehn Balken, genau einer offen – wie eine Radiogruppe. Der Inhalt steht
-   vollstaendig im HTML, hier wird nur der Zustand umgeschaltet.
-   Pfeiltasten wandern durch die Reihe: sonst muesste man sich zehnmal
-   durchtabben, um die letzte Referenz zu erreichen. */
+/* ---------- Referenzen: Kartenstapel ----------------------------------
+   Zehn Karten liegen uebereinander, die oberste wird weggewischt, der
+   Stapel rueckt nach, die geworfene legt sich unsichtbar unten wieder ein.
+
+   Ort, Titel und Satz liest der Treiber aus der .refliste im HTML statt
+   sie ein zweites Mal hier zu fuehren: eine Quelle, kein Auseinanderlaufen.
+   Ohne JavaScript bleibt genau diese Liste stehen und traegt alle zehn
+   Referenzen als Text – fuer Leser wie fuer Suchmaschinen. */
 (function(){
-  const wurzel = document.getElementById('lamellen');
-  if (!wurzel) return;
-  const balken = [...wurzel.querySelectorAll('.lamelle')];
-  if (!balken.length) return;
+  const deck = document.getElementById('refDeck');
+  const liste = document.getElementById('refListe');
+  if (!deck || !liste) return;
 
-  const oeffne = (l, fokus) => {
-    balken.forEach(x => {
-      const an = x === l;
-      x.classList.toggle('ist-auf', an);
-      x.setAttribute('aria-expanded', String(an));
+  const karten = [...deck.querySelectorAll('.refkarte')];
+  const DATEN = [...liste.querySelectorAll('li')].map(li => ({
+    ort:   li.dataset.ort || '',
+    titel: li.querySelector('b')?.textContent.trim() || '',
+    satz:  li.querySelector('span')?.textContent.trim() || ''
+  }));
+  const N = Math.min(karten.length, DATEN.length);
+  if (!N) return;
+
+  /* Erst wenn der Treiber wirklich laeuft, verschwindet die Lese-Fassung –
+     stirbt er vorher, bleibt sie als vollwertiger Ersatz stehen. */
+  document.getElementById('einblicke')?.classList.add('hat-js');
+
+  const nrEl    = document.getElementById('refNr');
+  const ortEl   = document.getElementById('refOrt');
+  const titelEl = document.getElementById('refTitel');
+  const satzEl  = document.getElementById('refSatz');
+  const innerEl = document.getElementById('refInfo');
+  const punkteEl= document.getElementById('refPunkte');
+  const sanft   = matchMedia('(prefers-reduced-motion: reduce)');
+
+  let aktiv = 0;
+
+  /* Stapel-Geometrie je Tiefe 0..4; ab Tiefe 3 unsichtbar. */
+  const TY = [0,-14,-27,-39,-39], SC = [1,.952,.906,.862,.862];
+  const RO = [0,-2.6,2.4,-3.4,-3.4], OP = [1,1,1,0,0];
+  const zwei = n => String(n).padStart(2,'0');
+
+  function lage(d){
+    const c = Math.min(d,4), a = Math.floor(c), b = Math.min(a+1,4), t = c-a;
+    const L = (u,v) => u + (v-u)*t;
+    return {y:L(TY[a],TY[b]), s:L(SC[a],SC[b]), r:L(RO[a],RO[b]), o:L(OP[a],OP[b])};
+  }
+
+  /* versatz 0..1: die hinteren Karten ruecken beim Ziehen anteilig vor. */
+  function zeichne(versatz){
+    for (let i = 0; i < N; i++){
+      const k = karten[i];
+      if (k.dataset.fliegt) continue;
+      const d = (i - aktiv + N) % N;
+      const g = lage(versatz && d > 0 && d < 5 ? d - versatz : d);
+      k.style.zIndex = String(N - d);
+      k.style.opacity = g.o.toFixed(3);
+      k.style.transform = 'translate3d(0,' + g.y.toFixed(2) + 'px,0) rotate('
+        + g.r.toFixed(2) + 'deg) scale(' + g.s.toFixed(4) + ')';
+    }
+  }
+
+  let textTimer = 0;
+  function fuelle(){
+    const d = DATEN[aktiv];
+    nrEl.textContent = zwei(aktiv + 1);
+    ortEl.textContent = d.ort;
+    titelEl.textContent = d.titel;
+    satzEl.textContent = d.satz;
+  }
+  function setzeText(mitBewegung){
+    clearTimeout(textTimer);
+    if (!mitBewegung || sanft.matches){ innerEl.classList.remove('wechselt'); fuelle(); return; }
+    innerEl.classList.add('wechselt');
+    textTimer = setTimeout(() => { fuelle(); innerEl.classList.remove('wechselt'); }, 150);
+  }
+
+  const punkte = [];
+  function frischeAnzeige(mitBewegung){
+    punkte.forEach((b,i) => {
+      const an = i === aktiv;
+      b.classList.toggle('an', an);
+      if (an) b.setAttribute('aria-current','true'); else b.removeAttribute('aria-current');
     });
-    if (fokus) l.focus();
+    setzeText(mitBewegung);
+  }
+
+  function wirf(karte, richtung){
+    if (karte._ruhe) clearTimeout(karte._ruhe);
+    karte.dataset.fliegt = '1';
+    karte.classList.remove('ohne-anim');
+    karte.classList.add('fliegt');
+    karte.style.zIndex = '30';
+    void karte.offsetWidth;
+    karte.style.transform = 'translate3d(' + (richtung*132) + '%,-6%,0) rotate('
+      + (richtung*17) + 'deg)';
+    karte.style.opacity = '0';
+    karte._ruhe = setTimeout(() => {
+      karte.classList.remove('fliegt');
+      karte.classList.add('ohne-anim');
+      delete karte.dataset.fliegt;
+      zeichne(0);                    /* legt sich unsichtbar unten in den Stapel */
+      void karte.offsetWidth;
+      karte.classList.remove('ohne-anim');
+      karte._ruhe = 0;
+    }, 470);
+  }
+
+  function holeZurueck(ziel){
+    const k = karten[ziel];
+    if (k._ruhe){ clearTimeout(k._ruhe); k._ruhe = 0; }
+    delete k.dataset.fliegt;
+    k.classList.remove('fliegt');
+    k.classList.add('ohne-anim');
+    k.style.zIndex = '30';
+    k.style.opacity = '1';
+    k.style.transform = 'translate3d(-132%,-6%,0) rotate(-17deg)';
+    void k.offsetWidth;
+    k.classList.remove('ohne-anim');
+    aktiv = ziel;
+    zeichne(0);
+    frischeAnzeige(true);
+  }
+
+  function geheZu(ziel, richtung){
+    ziel = ((ziel % N) + N) % N;
+    if (ziel === aktiv) return;
+    if (sanft.matches){ aktiv = ziel; zeichne(0); frischeAnzeige(false); return; }
+    /* Grosse Rueckwaertsspruenge holen die Karte von links herein, statt
+       sechsmal nacheinander nach rechts zu werfen. */
+    if ((ziel - aktiv + N) % N >= 6) holeZurueck(ziel);
+    else { wirf(karten[aktiv], richtung || -1); aktiv = ziel; zeichne(0); frischeAnzeige(true); }
+  }
+
+  /* ---- Selbstlauf: stoppt bei der ersten Beruehrung, endgueltig ---- */
+  let takt = 0, gestoppt = false;
+  const starte = () => {
+    if (gestoppt || sanft.matches || takt) return;
+    takt = setInterval(() => geheZu(aktiv + 1, -1), 5000);
   };
-
-  wurzel.addEventListener('click', e => {
-    const l = e.target.closest('.lamelle');
-    if (l) oeffne(l, false);
+  const stoppe = () => { gestoppt = true; if (takt){ clearInterval(takt); takt = 0; } };
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden){ if (takt){ clearInterval(takt); takt = 0; } } else starte();
+  });
+  sanft.addEventListener?.('change', () => {
+    if (sanft.matches && takt){ clearInterval(takt); takt = 0; }
   });
 
-  wurzel.addEventListener('keydown', e => {
-    const i = balken.indexOf(e.target.closest('.lamelle'));
-    if (i < 0) return;
-    const n = balken.length;
-    let ziel = null;
-    if (e.key === 'ArrowDown'  || e.key === 'ArrowRight') ziel = balken[(i + 1) % n];
-    else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') ziel = balken[(i - 1 + n) % n];
-    else if (e.key === 'Home') ziel = balken[0];
-    else if (e.key === 'End')  ziel = balken[n - 1];
-    if (!ziel) return;
-    e.preventDefault();
-    oeffne(ziel, true);
+  DATEN.slice(0, N).forEach((d,i) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'refpunkt';
+    b.setAttribute('aria-label', 'Referenz ' + (i+1) + ' von ' + N + ': ' + d.titel);
+    b.addEventListener('click', () => { stoppe(); geheZu(i); });
+    punkteEl.appendChild(b);
+    punkte.push(b);
   });
+
+  document.getElementById('refNext').addEventListener('click', () => { stoppe(); geheZu(aktiv+1,-1); });
+  document.getElementById('refPrev').addEventListener('click', () => { stoppe(); geheZu(aktiv-1); });
+
+  document.getElementById('einblicke').addEventListener('keydown', e => {
+    if      (e.key === 'ArrowRight'){ e.preventDefault(); stoppe(); geheZu(aktiv+1,-1); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); stoppe(); geheZu(aktiv-1); }
+    else if (e.key === 'Home')      { e.preventDefault(); stoppe(); geheZu(0); }
+    else if (e.key === 'End')       { e.preventDefault(); stoppe(); geheZu(N-1); }
+  });
+
+  /* ---- Wischen: die Karte folgt dem Finger ---- */
+  let zeiger = null, sx = 0, sy = 0, dx = 0, zieht = false, vorX = 0, vorT = 0, tempo = 0;
+
+  deck.addEventListener('pointerdown', e => {
+    if (e.button !== undefined && e.button !== 0) return;
+    stoppe();
+    zeiger = e.pointerId; sx = e.clientX; sy = e.clientY;
+    dx = 0; tempo = 0; zieht = false; vorX = e.clientX; vorT = e.timeStamp;
+  });
+
+  deck.addEventListener('pointermove', e => {
+    if (zeiger === null || e.pointerId !== zeiger) return;
+    const mx = e.clientX - sx, my = e.clientY - sy;
+    if (!zieht){
+      if (Math.abs(mx) > 9 && Math.abs(mx) > Math.abs(my) + 4){
+        zieht = true;
+        /* Capture ERST ab der Schwelle: ab pointerdown gesetzt, zielt der
+           anschliessende click aufs Deck statt auf den Knopf darunter. */
+        try { deck.setPointerCapture(zeiger); } catch(err){}
+        deck.classList.add('zieht');
+      } else if (Math.abs(my) > 14 && Math.abs(my) > Math.abs(mx)){
+        zeiger = null;             /* senkrechtes Scrollen gewinnt */
+        return;
+      } else return;
+    }
+    dx = mx;
+    tempo = (e.clientX - vorX) / Math.max(1, e.timeStamp - vorT);
+    vorX = e.clientX; vorT = e.timeStamp;
+    zeichne(Math.min(1, Math.abs(dx) / 140));
+    const oben = karten[aktiv];
+    oben.style.zIndex = '30';
+    oben.style.opacity = '1';
+    oben.style.transform = 'translate3d(' + dx.toFixed(1) + 'px,'
+      + (Math.abs(dx) * -0.03).toFixed(1) + 'px,0) rotate('
+      + Math.max(-15, Math.min(15, dx * 0.07)).toFixed(2) + 'deg)';
+  });
+
+  function endeZug(abgebrochen){
+    zeiger = null;
+    if (!zieht) return;
+    zieht = false;
+    deck.classList.remove('zieht');
+    const breite = deck.offsetWidth || 340;
+    const wirft = !abgebrochen &&
+      (Math.abs(dx) > breite * 0.32 || (Math.abs(tempo) > 0.55 && Math.abs(dx) > 30));
+    if (wirft) geheZu(aktiv + 1, dx > 0 ? 1 : -1);
+    else zeichne(0);               /* unter der Schwelle federt sie zurueck */
+    dx = 0;
+  }
+  deck.addEventListener('pointerup',     e => { if (e.pointerId === zeiger) endeZug(false); });
+  deck.addEventListener('pointercancel', e => { if (e.pointerId === zeiger) endeZug(true); });
+
+  zeichne(0);
+  frischeAnzeige(false);
+  starte();
 })();
 
 document.getElementById('year').textContent = new Date().getFullYear();
