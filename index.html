@@ -635,7 +635,11 @@ ul{list-style:none}
    nacheinander auf und verschwinden wieder (scroll-getrieben).
    Unscharfe Video-Kopie füllt die Ränder auf Breitbild.
    ============================================================ */
-.intro{height:440vh;height:440svh;position:relative}
+/* Scrollstrecke der Filmakte, alle vier um 30 % verlaengert (Sept. 2026).
+   Vorher lief der Lohn-Akt mit 62svh je Phase – gut zwei Drittel
+   Bildschirmhoehe, eine einzige Wischgeste schob eine Aussage komplett
+   durch. Die Verhaeltnisse untereinander bleiben, es wird nur langsamer. */
+.intro{height:570vh;height:570svh;position:relative}
 .intro__pin{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:#0b0c10}
 /* max-width:none schützt die Überbreite, falls hier je wieder ein <img>
    statt des <video> steht (die globale img-Regel kappt sonst auf 100%). */
@@ -748,12 +752,12 @@ html.static .intro__phrase--first,body.reduced .intro__phrase--first{transform:t
    sonst laufen zwei fast identische Pins hintereinander weg.
    ============================================================ */
 /* Eine einzige Scroll-Strecke für beide Akte: acht Phasen à 80svh. */
-.kino{position:relative;height:640vh;height:640svh}
+.kino{position:relative;height:830vh;height:830svh}
 /* Die Werkstatt-Sektion hat nur eine Bühne und vier Phasen – gleiche
    Strecke je Phase (80svh), also die halbe Gesamthöhe. */
-.kino--werkstatt{height:640vh;height:640svh}
+.kino--werkstatt{height:830vh;height:830svh}
 /* Fuenf Phasen statt acht – rund 80svh je Aussage, wie in den anderen Akten. */
-.kino--bewerben{height:420vh;height:420svh}
+.kino--bewerben{height:545vh;height:545svh}
 
 /* ============================================================
    HOLOGRAMM-KARTE – Dresden und Umland als projizierte Fläche.
@@ -1198,49 +1202,21 @@ html.static .intro__phrase--first,body.reduced .intro__phrase--first{transform:t
   50%    {transform:scale(1.14);opacity:1}}
 @media(prefers-reduced-motion:reduce){.leiter li.jetzt i::after{animation:none;opacity:.8}}
 
-/* ---- WhatsApp: erst der Knopf, die Nummer erscheint auf Klick.
-   Bewusst nicht sofort sichtbar – eine offen stehende Rufnummer wird
-   abgegriffen, und der Klick ist zugleich die Einwilligung, den
-   Kanal zu wechseln. */
+/* ---- WhatsApp: der Knopf IST der Link. Ein Tipp, und WhatsApp steht offen,
+   „Hallo Julia, ich habe eine Frage zur Ausbildung bei FAE." schon im
+   Eingabefeld. Davor klappte er erst die Rufnummer auf, die dann ein zweites
+   Mal angetippt werden musste – zwei Schritte fuer eine Frage, und die Nummer
+   stand danach offen auf dem Schirm. Der Pfeil auf der Kachel verspricht
+   seitdem wieder das, was passiert: einen Sprung.
+   Als <a> braucht der Knopf text-decoration; alles andere trug er schon. */
 .wa{margin-top:20px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 .wa__knopf{display:inline-flex;align-items:center;gap:10px;padding:14px 24px;border:0;
   border-radius:999px;font-family:var(--font-body);font-size:15px;font-weight:750;
-  cursor:pointer;color:#fff;background:#1faa53;
+  cursor:pointer;color:#fff;background:#1faa53;text-decoration:none;
   box-shadow:0 10px 26px -12px rgba(10,90,40,.9);
   transition:transform .3s var(--ease),box-shadow .3s var(--ease)}
 .wa__knopf:hover{transform:translateY(-2px);box-shadow:0 16px 38px -12px rgba(10,90,40,1)}
 .wa__knopf svg{flex:none}
-.wa__feld{display:none;align-items:center;gap:12px;flex-wrap:wrap;
-  padding:12px 16px;border-radius:14px;background:rgba(255,255,255,.1);
-  border:1px solid rgba(255,255,255,.26);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
-.wa__feld.auf{display:flex;animation:waAuf .4s var(--ease) both}
-@keyframes waAuf{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-/* Die Rufnummer stand in Orbitron – dessen durchgestrichene Null machte
-   aus „03529 56720" ein „Ø3529 5672Ø". Eine Telefonnummer muss man
-   abtippen koennen, deshalb hier die Textschrift. */
-.wa__feld a{font-family:var(--font-body);font-size:clamp(16.5px,1.75vw,22px);font-weight:800;
-  color:#fff;text-decoration:none;letter-spacing:.03em;
-  font-variant-numeric:tabular-nums}
-.wa__feld a:hover{text-decoration:underline;text-underline-offset:4px}
-.wa__feld span{font-size:13px;color:#c9ccd4;line-height:1.4;max-width:26ch}
-/* Im FAQ-Fuss steht das Feld auf hellem Panel statt auf Video – dort waere
-   die weisse Schrift auf hellem Grund unlesbar. */
-.wa__feld--hell{margin-top:12px;background:rgba(16,17,22,.055);
-  border-color:var(--line);-webkit-backdrop-filter:none;backdrop-filter:none}
-.wa__feld--hell a{color:var(--ink)}
-.wa__feld--hell span{color:var(--muted)}
-/* In der Knopfliste am Seitenende sitzt das Feld als eigene Zeile unter
-   seinem Knopf und nimmt dessen Breite an. */
-.wahl .wa__feld{width:100%;box-sizing:border-box}
-/* Der WhatsApp-Knopf ist jetzt ein <button>: die Knopfstile setzen keine
-   Schriftfarbe und keinen Rahmen zurueck, das holt diese Regel nach. */
-button.wahl__knopf{border:0;font-family:inherit;text-align:left;
-  width:100%;cursor:pointer;color:inherit}
-/* Der Pfeil versprach einen Sprung, dabei klappt der Knopf nur die Nummer
-   auf. Er dreht sich jetzt nach unten, solange sie steht. */
-button.wahl__knopf .arr{transition:transform .3s var(--ease)}
-button.wahl__knopf[aria-expanded="true"] .arr{transform:rotate(90deg)}
-button.btn{border:0;cursor:pointer;font-family:var(--font-body)}
 .kino__phrase--cta{pointer-events:none}
 .kino__phrase--cta.active{pointer-events:auto}
 
@@ -1307,9 +1283,9 @@ button.btn{border:0;cursor:pointer;font-family:var(--font-body)}
 
 
 @media(max-width:860px){
-  .kino{height:560vh;height:560svh}
-  .kino--werkstatt{height:560vh;height:560svh}
-  .kino--bewerben{height:380vh;height:380svh}
+  .kino{height:730vh;height:730svh}
+  .kino--werkstatt{height:730vh;height:730svh}
+  .kino--bewerben{height:495vh;height:495svh}
   .kino__bg{display:none}
   /* Wie im Intro: der Schlagschatten faellt aus dem Bild und kostet
      trotzdem einen Weichzeichnerdurchgang pro Videobild. Die Daempfung
@@ -1330,7 +1306,6 @@ button.btn{border:0;cursor:pointer;font-family:var(--font-body)}
     background:rgba(14,15,20,.78)}
   .leiter li.an b{background:rgba(30,48,24,.78)}
   .leiter li.jetzt b{background:rgba(58,12,28,.8)}
-  .wa__feld span{display:none}
 }
 
 /* Audit / Reduced Motion / kein JS: kein Pinning, alle Phasen untereinander
@@ -2125,35 +2100,172 @@ h2{font-family:var(--font-display);font-weight:800;font-size:clamp(1.5rem,3.4vw,
 
 /* Der Abbinder ist kein Trennstrich mehr, sondern eine eigene Karte:
    ein Gesicht daneben macht aus „schreib uns" ein Angebot von Menschen. */
-.fragen__fuss{margin-top:var(--s7);border-radius:var(--radius);overflow:hidden;
-  border:1px solid var(--line);box-shadow:var(--shadow-card);
+/* ---- Julia-Kachel am Ende der Fragen -------------------------------
+   Vorher: ein beschnittenes Foto in einem Kasten, daneben der Text. Julia
+   sass in einem Bilderrahmen und hatte mit der Kachel nichts zu tun.
+   Jetzt steht sie IN der Kachel – freigestellt, unten buendig, hinter ihr
+   ein Markenschein. Der Knopf daneben fuehrt zu genau der Person, die man
+   sieht. Das Bild traegt Alpha (WebP, 75 KB statt 236 KB als JPEG). */
+.fragen__fuss{position:relative;margin-top:var(--s7);border-radius:var(--radius);
+  overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow-card);
   background:linear-gradient(150deg,rgba(78,157,51,.14),var(--panel) 52%);
-  display:grid;grid-template-columns:minmax(0,260px) minmax(0,1fr);align-items:center}
-.fragen__fuss figure{position:relative;align-self:stretch;min-height:190px;background:var(--panel-2)}
-.fragen__fuss figure img{position:absolute;inset:0;width:100%;height:100%;
-  object-fit:cover;object-position:50% 30%}
-.fragen__fuss figure::after{content:"";position:absolute;top:0;bottom:0;right:0;width:5px;
-  background:url('assets/img/zwischenstreifen.webp') center/cover;z-index:2}
-/* Sagt, was auf dem Bild zu sehen ist – damit der Name im Text daneben
-   nicht auf ein Gesicht im Bild bezogen wird. */
-.fragen__fuss figcaption{position:absolute;left:0;right:0;bottom:0;z-index:1;
-  padding:34px 14px 11px;color:#fff;font-size:12.5px;font-weight:650;line-height:1.3;
-  background:linear-gradient(180deg,transparent,rgba(12,13,18,.82))}
-.fragen__fuss__txt{padding:clamp(20px,3vw,30px) clamp(20px,3vw,32px);
-  display:flex;flex-wrap:wrap;gap:var(--s4) var(--s5);
-  align-items:center;justify-content:space-between}
-.fragen__fuss p{font-size:15px;line-height:1.55;max-width:38ch;color:var(--body-ongray)}
-@media(max-width:760px){
-  .fragen__fuss{grid-template-columns:1fr}
-  /* 4/3 statt 16/9: das Hochformat-Original verliert im breiten Ausschnitt
-     die Köpfe der drei Personen.
+  padding:clamp(20px,3.4vw,28px);min-height:390px}
+/* Markenschein hinter ihr: Pink nach Gruen, damit die Freistellkante nicht
+   direkt auf dem hellen Panel steht, sondern eine Tiefe bekommt. */
+.fragen__fuss::before{content:"";position:absolute;z-index:0;
+  right:-20%;bottom:-34%;width:82%;aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle,rgba(223,9,78,.26),rgba(78,157,51,.15) 56%,transparent 73%);
+  opacity:0;transition:opacity .9s var(--ease) .12s}
+/* Der Markenstreifen lag als 5px-Kante am Foto. Ohne Foto sitzt er jetzt
+   oben auf der Kachel und haelt sie an der Seite fest. */
+.fragen__fuss::after{content:"";position:absolute;z-index:3;top:0;left:0;right:0;height:5px;
+  background:url('assets/img/zwischenstreifen.webp') center/cover}
+.fragen__fuss__txt{position:relative;z-index:2}
+/* 52 %: gemessen, nicht geschaetzt. Julias linke Kante liegt bei 450px
+   Anzeigebreite auf x=241, die Textspalte beginnt bei x=39 – bleiben 202px,
+   und 52 % der Textspalte sind 193px. Vorher standen hier 60/62 %, damit
+   lief der Mail-Knopf 37px in ihren Arm hinein. */
+/* Direktes Kind, nicht jedes p in der Kachel: die Chatblase und das
+   Namensschild sind auch <p> und holten sich sonst diese Breite. Die Blase
+   wurde dadurch 52 % von 52 % breit – eine 97px schmale Saeule, in der die
+   Nachricht vierzeilig umbrach. */
+.fragen__fuss__txt > p{font-size:15px;line-height:1.55;color:var(--body-ongray);
+  max-width:min(38ch,52%)}
+.fragen__fuss .hero__ctas{margin-top:var(--s5);flex-direction:column;
+  align-items:flex-start;gap:10px;max-width:52%}
+.fragen__fuss .hero__ctas .btn{width:100%;justify-content:center;
+  padding:12px 18px;font-size:14px}
+/* Julia selbst: unten buendig, ragt rechts bewusst ein Stueck aus der Kachel.
+   Ein Freisteller, der exakt am Rand endet, sieht aus wie ein Fehler; einer,
+   der angeschnitten wird, sieht aus wie Absicht. */
+/* Breiter und weiter ueber die Kante als der Vorgaenger: der neue
+   Freisteller ist mit 0,912 deutlich breiter im Seitenverhaeltnis (0,753
+   vorher), weil er ihren ganzen Oberkoerper zeigt statt am Rahmen
+   abgeschnitten zu sein. Bei gleicher Breite waere sie 49px flacher und das
+   Feld ueber ihr bliebe leer. Der Anschnitt rechts ist gewollt – die
+   Kachelkante schneidet, nicht eine gerade Linie mitten im Bild. */
+/* 84 % / -19,6 %: das Verhaeltnis Anschnitt zu Breite bleibt bei 14/60 =
+   0,233, der Ausschnitt ist also exakt derselbe wie bei 60 % / -14 % – sie
+   ist nur groesser. Gemessen ist 1,40 das Maximum: darueber laeuft ihr Kopf
+   oben aus der Kachel (33 px Luft bleiben) und ihre Silhouette kaeme den
+   Knoepfen naeher als 28 px. Nicht die Knopfspalte ist die Grenze, sondern
+   die Kachelhoehe. */
+.fragen__fuss__julia{position:absolute;z-index:1;right:-19.6%;bottom:0;
+  width:84%;height:auto;pointer-events:none;
+  filter:drop-shadow(0 16px 22px rgba(12,13,18,.26));
+  opacity:0;transform:translateY(28px);
+  transition:opacity .7s var(--ease),transform .8s cubic-bezier(.16,.84,.34,1)}
+/* Ihr Name. Die alte Bildunterschrift ist mit dem Bilderrahmen entfallen,
+   die Frage bleibt: wer ist die Person da? Das Schild sitzt auf ihrem
+   dunklen Sakko, deshalb helle Schrift auf dunklem Grund. */
+.fragen__fuss__name{position:absolute;z-index:2;right:7%;bottom:14px;
+  margin:0;padding:6px 13px;border-radius:999px;
+  background:rgba(12,13,18,.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  color:#fff;font-size:12.5px;font-weight:700;line-height:1.2;letter-spacing:.01em;
+  display:flex;align-items:center;gap:7px;
+  opacity:0;transform:translateY(10px) scale(.94);
+  transition:opacity .5s var(--ease) .34s,transform .5s cubic-bezier(.2,.9,.3,1.2) .34s}
+/* Der gruene Punkt ist kein Schmuck: er sagt „erreichbar" und wiederholt
+   damit die Zusage aus dem Text, ohne sie ein drittes Mal auszuschreiben. */
+.fragen__fuss__name i{width:7px;height:7px;border-radius:50%;background:#3ddc7f;flex:none;
+  box-shadow:0 0 0 0 rgba(61,220,127,.6);animation:juliaPuls 2.6s ease-out infinite}
+@keyframes juliaPuls{
+  0%  {box-shadow:0 0 0 0 rgba(61,220,127,.55)}
+  70% {box-shadow:0 0 0 7px rgba(61,220,127,0)}
+  100%{box-shadow:0 0 0 0 rgba(61,220,127,0)}}
+.fragen__fuss.ist-da::before,
+.fragen__fuss.ist-da .fragen__fuss__julia,
+.fragen__fuss.ist-da .fragen__fuss__name{opacity:1;transform:none}
 
-     min-height bleibt stehen statt auf 0 zu fallen: das Bild liegt absolut
-     im figure, und ohne aspect-ratio (aeltere Androids, WebViews) haette
-     die Kachel Hoehe 0 – das Bild waere schlicht weg. Wo aspect-ratio
-     greift, gewinnt ohnehin der groessere Wert. */
-  .fragen__fuss figure{min-height:190px;aspect-ratio:4/3}
-  .fragen__fuss figure::after{top:auto;left:0;right:0;bottom:0;width:auto;height:5px}
+/* ---- Die Chatblase --------------------------------------------------
+   Der Auftritt fuehrt vor, was der Knopf verspricht: da tippt ein Mensch
+   und antwortet. Erst die Punkte, dann die Nachricht – die Grammatik, in
+   der die Zielgruppe den ganzen Tag schreibt.
+
+   ZWEI ELEMENTE statt einem, das seine Groesse aendert: die Punktepille
+   liegt absolut UEBER der Blase, die Blase steht im Fluss und bestimmt
+   die Hoehe. So wird ueberblendet statt aufgezogen – kein Umbruch, kein
+   Springen der Knoepfe darunter, und die Punktepille darf klein bleiben,
+   waehrend die Blase schon ihre Endbreite hat. */
+.juliachat{position:relative;margin-top:var(--s4);max-width:52%}
+.juliachat__blase{margin:0;padding:10px 14px;border-radius:16px 16px 4px 16px;
+  background:#fff;border:1px solid var(--line);box-shadow:0 6px 16px -10px rgba(12,13,18,.5);
+  font-size:13.5px;line-height:1.4;font-weight:600;color:var(--ink);
+  opacity:0;transform:translateY(6px) scale(.96);transform-origin:100% 100%}
+/* Der Zipfel zeigt nach rechts unten – dorthin, wo Julia steht. Eine Blase
+   ohne Richtung gehoert niemandem. */
+.juliachat__blase::after{content:"";position:absolute;right:-5px;bottom:0;
+  width:12px;height:12px;background:#fff;
+  border-right:1px solid var(--line);border-bottom:1px solid var(--line);
+  border-radius:0 0 3px 0;transform:rotate(-45deg) skew(6deg,6deg)}
+.juliachat__tippt{position:absolute;left:0;top:0;z-index:1;
+  display:inline-flex;align-items:center;gap:5px;padding:11px 14px;
+  border-radius:16px 16px 4px 16px;background:#fff;border:1px solid var(--line);
+  box-shadow:0 6px 16px -10px rgba(12,13,18,.5);
+  opacity:0;transform:translateY(6px) scale(.9);transform-origin:0 100%}
+.juliachat__tippt i{width:6px;height:6px;border-radius:50%;background:#9aa0ab}
+@keyframes blasePop{from{opacity:0;transform:translateY(6px) scale(.96)}
+                    to  {opacity:1;transform:none}}
+@keyframes pillePop{from{opacity:0;transform:translateY(6px) scale(.9)}
+                    to  {opacity:1;transform:none}}
+@keyframes pilleWeg{from{opacity:1;transform:none}
+                    to  {opacity:0;transform:translateY(-4px) scale(.94)}}
+@keyframes tippen  {0%,80%,100%{transform:none;opacity:.45}
+                    40%        {transform:translateY(-4px);opacity:1}}
+/* Der Glanz laeuft einmal ueber den gruenen Knopf, wenn die Nachricht steht –
+   der Blick ist dann bei der Blase und wird an den Knopf weitergereicht.
+   Nutzt dieselbe Schraege wie .btn:hover::before, damit es kein zweiter
+   Effekt ist, sondern derselbe. */
+@keyframes knopfGlanz{from{transform:translateX(-120%) skewX(-20deg)}
+                      to  {transform:translateX(120%)  skewX(-20deg)}}
+.fragen__fuss.ist-da .juliachat__tippt{
+  animation:pillePop .34s var(--ease) .45s both, pilleWeg .22s ease 1.25s both}
+.fragen__fuss.ist-da .juliachat__tippt i{
+  animation:tippen .95s ease-in-out .55s 1 both}
+.fragen__fuss.ist-da .juliachat__tippt i:nth-child(2){animation-delay:.70s}
+.fragen__fuss.ist-da .juliachat__tippt i:nth-child(3){animation-delay:.85s}
+.fragen__fuss.ist-da .juliachat__blase{animation:blasePop .42s var(--ease) 1.4s both}
+.fragen__fuss.ist-da .btn--green::before{animation:knopfGlanz .75s var(--ease) 1.85s 1}
+
+/* Ab Tablet ist Platz: Julia wird schmaler, der Text darf ueber die volle
+   Breite laufen, die Knoepfe stehen wieder nebeneinander. */
+@media(min-width:761px){
+  .fragen__fuss{padding:clamp(26px,3vw,34px);min-height:280px}
+  .fragen__fuss__txt > p{max-width:min(42ch,58%)}
+  .juliachat{max-width:min(34ch,46%)}
+  /* max-width bleibt auch hier stehen: ohne Deckel waechst der Knopfkasten
+     ueber die volle Kachelbreite und liegt bei 1000px 300px weit unter
+     Julia. Die Knoepfe selbst sitzen zwar links, aber ihre Klickflaeche
+     reichte bis unter ihren Arm. */
+  .fragen__fuss .hero__ctas{flex-direction:row;align-items:center;max-width:60%}
+  .fragen__fuss .hero__ctas .btn{width:auto;padding:14px 26px;font-size:15px}
+  /* Ab Tablet ueber die HOEHE skalieren, nicht ueber die Breite: die Kachel
+     ist hier flach (kurzer Text, Knoepfe nebeneinander), und eine feste
+     Breite machte sie 342px hoch in einer 291px hohen Kachel – der Kopf lag
+     oberhalb der Kante und wurde von overflow:hidden abgeschnitten.
+     Mit height:100% passt sie sich an und traegt auch ein anderes
+     Seitenverhaeltnis, wenn das Bild einmal getauscht wird. */
+  .fragen__fuss__julia{height:100%;width:auto;right:2%}
+  .fragen__fuss__name{right:4%}
+}
+/* Kein JS, Audit-Ansicht oder reduzierte Bewegung: Endzustand sofort.
+   Ohne diese Zeile bliebe Julia auf opacity:0 stehen – das Bild waere weg. */
+html.static .fragen__fuss::before,body.reduced .fragen__fuss::before,
+html.static .fragen__fuss__julia,body.reduced .fragen__fuss__julia,
+html.static .fragen__fuss__name,body.reduced .fragen__fuss__name{
+  opacity:1;transform:none;transition:none}
+html.static .juliachat__blase,body.reduced .juliachat__blase{
+  opacity:1;transform:none;animation:none}
+html.static .juliachat__tippt,body.reduced .juliachat__tippt{display:none}
+@media(prefers-reduced-motion:reduce){
+  .fragen__fuss::before,.fragen__fuss__julia,.fragen__fuss__name{
+    opacity:1;transform:none;transition:none}
+  .fragen__fuss__name i{animation:none}
+  /* Die Nachricht steht sofort, das Tippen entfaellt: die Aussage steckt im
+     Text, nicht in der Bewegung. */
+  .juliachat__blase{opacity:1;transform:none;animation:none}
+  .juliachat__tippt{display:none}
+  .fragen__fuss.ist-da .btn--green::before{animation:none}
 }
 
 /* Redaktionsansicht /ausbildung/?offen */
@@ -2333,9 +2445,15 @@ html.static .wipe{clip-path:inset(0 0 0 0 round var(--radius))}
   .kino__buehne[data-akt="2"]{display:none}
   .leiter li{color:#fff}
   .leiter li i{background:var(--green)}
-  /* Der Knopf braucht JS zum Aufklappen – also steht die Nummer gleich da. */
-  .wa__knopf{display:none}
-  .wa__feld{display:flex}
+  /* Julias Auftritt haengt an .ist-da, das der Beobachter setzt. Ohne JS
+     kommt die Klasse nie – ohne diese Zeile stuende die Kachel leer da,
+     mit Text und Knoepfen, aber ohne die Person, um die es geht. */
+  .fragen__fuss::before,.fragen__fuss__julia,.fragen__fuss__name{
+    opacity:1;transform:none;transition:none}
+  .fragen__fuss__name i{animation:none}
+  .juliachat__blase{opacity:1;transform:none;animation:none}
+  .juliachat__tippt{display:none}
+
   /* Die Kopfzeile wird sonst nie opak (das macht sonst JS beim Scrollen)
      und läuft transparent über der Laufschrift. */
   .nav{background:rgba(201,203,199,.92);-webkit-backdrop-filter:blur(14px);
@@ -2372,7 +2490,13 @@ html.static .wipe{clip-path:inset(0 0 0 0 round var(--radius))}
   </a>
   <nav class="nav__kacheln" aria-label="Hauptnavigation">
     <a href="#berufe">Beruf finden</a>
-    <a class="ist-cta" href="#bewerben">Jetzt bewerben</a>
+    <!-- „Jetzt bewerben" fuehrte bis hierher nur zum Abschnitt weiter unten:
+         zwei Schritte fuer einen Knopf, der einen verspricht. Er oeffnet jetzt
+         wie jeder andere Bewerbungsknopf das Mailprogramm mit fertiger Vorlage
+         (Vorlagentext haengt das Skript an, siehe a[data-mail]). Zum Abschnitt
+         fuehren die Knoepfe im Fliesstext weiterhin. -->
+    <a class="ist-cta" data-mail="bewerbung"
+       href="mailto:PERSPEKTIVEN@fae.energy?subject=Bewerbung%20Ausbildung%20%2F%20Duales%20Studium">Jetzt bewerben</a>
   </nav>
 </header>
 
@@ -2600,10 +2724,12 @@ html.static .wipe{clip-path:inset(0 0 0 0 round var(--radius))}
        ein Betrieb offen hinschreibt: Was verdiene ich? Akt 2 beantwortet
        die zweite: Und was ist danach?
        ══ OFFENE PUNKTE ═══════════════════════════════════════════════
-       wa-nummer        Julias Mobilnummer. Aktuell steht hier die
-                        FESTNETZNUMMER aus dem Impressum – über die
-                        läuft kein WhatsApp. Zwei Stellen tauschen:
-                        data-tel am Knopf und der sichtbare Text.
+       wa-nummer        Die Knöpfe führen jetzt direkt nach WhatsApp, auf
+                        0151 40255855. Das ist eine Mobilvorwahl, die
+                        Festnetznummer aus dem Impressum steht hier also nicht
+                        mehr. UNBESTÄTIGT bleibt, ob das Julias Anschluss ist –
+                        zu ändern in JULIA_WA im Skriptblock und in den drei
+                        href="https://wa.me/…" im Markup.
        weiterbildung    Ob FAE Meister/Techniker fördert, ist unbestätigt.
                         Die Leiter nennt deshalb Wege, keine Zusagen.
        ══════════════════════════════════════════════════════════════ -->
@@ -2675,15 +2801,11 @@ html.static .wipe{clip-path:inset(0 0 0 0 round var(--radius))}
           <p class="kino__gross">Noch Fragen zum Geld?</p>
           <p class="kino__sub">Julia antwortet dir innerhalb von 24 Stunden – kurz und ohne Bewerbung.</p>
           <div class="wa">
-            <button class="wa__knopf" id="waKnopf" type="button"
-              aria-expanded="false" aria-controls="waFeld">
+            <a class="wa__knopf" data-wa target="_blank" rel="noopener"
+              href="https://wa.me/4915140255855?text=Hallo%20Julia%2C%20ich%20habe%20eine%20Frage%20zur%20Ausbildung%20bei%20FAE.">
               <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.6 14.2c-.24.67-1.4 1.28-1.93 1.32-.5.04-.96.22-3.23-.67-2.72-1.07-4.44-3.85-4.57-4.03-.13-.18-1.09-1.45-1.09-2.77s.69-1.96.94-2.23c.24-.27.53-.34.7-.34l.5.01c.16 0 .38-.06.59.45.22.53.74 1.85.8 1.98.07.13.11.29.02.47-.09.18-.13.29-.27.44l-.4.47c-.13.13-.27.28-.12.55.15.27.67 1.1 1.43 1.78.98.87 1.8 1.14 2.07 1.27.27.13.42.11.58-.07.16-.18.67-.78.85-1.05.18-.27.35-.22.6-.13.24.09 1.55.73 1.82.86.27.13.44.2.5.31.07.11.07.63-.17 1.3Z"/></svg>
               Julia auf WhatsApp fragen
-            </button>
-            <div class="wa__feld" id="waFeld">
-              <a href="https://wa.me/4915140255855?text=Hallo%20Julia%2C%20ich%20habe%20eine%20Frage%20zur%20Ausbildung%20bei%20FAE." target="_blank" rel="noopener">+49&nbsp;151&nbsp;40255855</a>
-              <span>Tipp auf die Nummer, dann öffnet sich WhatsApp. Julia antwortet innerhalb von 24&nbsp;Stunden.</span>
-            </div>
+            </a>
           </div>
         </div>
 
@@ -3277,38 +3399,39 @@ html.static .wipe{clip-path:inset(0 0 0 0 round var(--radius))}
         </li>
       </ul>
 
-      <!-- Bildunterschrift und Rollenzusatz gehoeren zusammen: ohne sie
-           stand „Julia antwortet dir" direkt unter einem Foto mit einer
-           jungen Frau darauf – und die Leserin las das Bild als Julia.
-           Keine der abgebildeten Personen ist Julia. Die Unterschrift sagt,
-           was zu sehen ist, der Zusatz sagt, wer Julia ist. -->
-      <div class="fragen__fuss">
-        <figure>
-          <!-- Bewusst kein loading="lazy": das Bild liegt absolut in einer
-               Kachel, deren Hoehe erst aus aspect-ratio entsteht. Sieht der
-               Lazy-Lader sie im Moment der Pruefung mit Hoehe 0, laedt er
-               das Bild nie nach – auf dem Handy war es dadurch weg. 236 KB
-               ganz unten auf der Seite sind den sicheren Auftritt wert. -->
-          <img src="assets/img/szene-team.jpg" width="1031" height="1280"
-            decoding="async"
-            alt="Auszubildende und Kollegen von FAE besprechen gemeinsam einen Gebäudeplan am Tisch">
-          <figcaption>Planbesprechung im Büro in Heidenau</figcaption>
-        </figure>
+      <!-- Wer im Bild steht, muss benannt sein. Frueher stand hier ein Foto
+           einer Planbesprechung und die Unterschrift musste klarstellen, dass
+           KEINE der Personen Julia ist. Jetzt ist es Julia – und das Schild
+           auf ihrem Sakko sagt es, damit „schreib sie Julia" und das Gesicht
+           daneben zusammengehen. -->
+      <div class="fragen__fuss" id="juliaKachel">
         <div class="fragen__fuss__txt">
           <p>Deine Frage steht nicht dabei? Dann schreib sie <b>Julia</b> –
             am schnellsten per WhatsApp. Sie antwortet innerhalb von 24 Stunden,
             auch auf Fragen, die keine Bewerbung sind.</p>
-          <div class="hero__ctas" style="margin-top:16px">
-            <button class="btn btn--green wa__knopf" type="button"
-              aria-expanded="false" aria-controls="waFeldFragen">Julia auf WhatsApp fragen</button>
+          <!-- aria-hidden: die Blase wiederholt nur, was im Absatz darueber
+               schon steht („auch auf Fragen, die keine Bewerbung sind").
+               Vorgelesen waere sie eine Dopplung, gesehen ist sie der Beweis,
+               dass da jemand tippt. -->
+          <div class="juliachat" aria-hidden="true">
+            <span class="juliachat__tippt"><i></i><i></i><i></i></span>
+            <p class="juliachat__blase">Schreib einfach. Ich beiß nicht.</p>
+          </div>
+          <div class="hero__ctas">
+            <a class="btn btn--green wa__knopf" data-wa target="_blank" rel="noopener"
+              href="https://wa.me/4915140255855?text=Hallo%20Julia%2C%20ich%20habe%20eine%20Frage%20zur%20Ausbildung%20bei%20FAE.">Auf WhatsApp fragen</a>
             <a class="btn btn--ghost" href="mailto:PERSPEKTIVEN@fae.energy?subject=Frage%20zur%20Ausbildung">Lieber
               per Mail</a>
           </div>
-          <div class="wa__feld wa__feld--hell" id="waFeldFragen">
-            <a href="https://wa.me/4915140255855?text=Hallo%20Julia%2C%20ich%20habe%20eine%20Frage%20zur%20Ausbildung%20bei%20FAE." target="_blank" rel="noopener">+49&nbsp;151&nbsp;40255855</a>
-            <span>Tipp auf die Nummer, dann öffnet sich WhatsApp. Julia antwortet innerhalb von 24&nbsp;Stunden.</span>
-          </div>
         </div>
+        <!-- Kein loading="lazy": das Bild liegt absolut in der Kachel und
+             startet auf opacity:0. Ein Lazy-Lader, der es in dem Moment
+             prueft, laedt es womoeglich nie nach – auf dem Handy war das
+             Bild dadurch schon einmal ganz weg. -->
+        <img class="fragen__fuss__julia" src="assets/img/julia-frei-v3.webp"
+          width="640" height="695" decoding="async"
+          alt="Julia von FAE Elektrotechnik, die Ansprechpartnerin für Fragen zur Ausbildung">
+        <p class="fragen__fuss__name"><i aria-hidden="true"></i>Julia</p>
       </div>
 
     </div>
@@ -3377,16 +3500,12 @@ html.static .wipe{clip-path:inset(0 0 0 0 round var(--radius))}
               <i class="arr" aria-hidden="true">→</i>
             </a>
 
-            <button class="wahl__knopf wahl__knopf--gruen wa__knopf" type="button"
-               aria-expanded="false" aria-controls="waFeldWahl">
+            <a class="wahl__knopf wahl__knopf--gruen wa__knopf" data-wa
+               target="_blank" rel="noopener" href="https://wa.me/4915140255855?text=Hallo%20Julia%2C%20ich%20habe%20eine%20Frage%20zur%20Ausbildung%20bei%20FAE.">
               <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.6 14.2c-.24.67-1.4 1.28-1.93 1.32-.5.04-.96.22-3.23-.67-2.72-1.07-4.44-3.85-4.57-4.03-.13-.18-1.09-1.45-1.09-2.77s.69-1.96.94-2.23c.24-.27.53-.34.7-.34l.5.01c.16 0 .38-.06.59.45.22.53.74 1.85.8 1.98.07.13.11.29.02.47-.09.18-.13.29-.27.44l-.4.47c-.13.13-.27.28-.12.55.15.27.67 1.1 1.43 1.78.98.87 1.8 1.14 2.07 1.27.27.13.42.11.58-.07.16-.18.67-.78.85-1.05.18-.27.35-.22.6-.13.24.09 1.55.73 1.82.86.27.13.44.2.5.31.07.11.07.63-.17 1.3Z"/></svg>
               <span><b>Stell deine Frage per WhatsApp</b><small>Ohne Bewerbung, ohne Verpflichtung</small></span>
               <i class="arr" aria-hidden="true">→</i>
-            </button>
-            <div class="wa__feld" id="waFeldWahl">
-              <a href="https://wa.me/4915140255855?text=Hallo%20Julia%2C%20ich%20habe%20eine%20Frage%20zur%20Ausbildung%20bei%20FAE." target="_blank" rel="noopener">+49&nbsp;151&nbsp;40255855</a>
-              <span>Tipp auf die Nummer, dann öffnet sich WhatsApp. Julia antwortet innerhalb von 24&nbsp;Stunden.</span>
-            </div>
+            </a>
 
             <a class="wahl__knopf wahl__knopf--klar"
                data-mail="praktikum" href="mailto:PERSPEKTIVEN@fae.energy?subject=Anfrage%20Sch%C3%BClerpraktikum">
@@ -4101,9 +4220,10 @@ kinoTick();
    der Seite gebraucht wird. Aendert sich die Nummer oder ein Text,
    ist das hier die einzige Stelle.
    ============================================================ */
-const JULIA_ANZEIGE = '0151 40255855';
-const JULIA_TEL     = '+4915140255855';
-const MAIL_ZIEL     = 'PERSPEKTIVEN@fae.energy';
+const JULIA_WA  = '4915140255855';   /* wa.me will die Nummer ohne + und ohne Null */
+const WA_TEXT   = 'Hallo Julia, ich habe eine Frage zur Ausbildung bei FAE.';
+const WA_LINK   = 'https://wa.me/' + JULIA_WA + '?text=' + encodeURIComponent(WA_TEXT);
+const MAIL_ZIEL = 'PERSPEKTIVEN@fae.energy';
 
 /* CRLF statt \n: Outlook bricht bei einfachem %0A die Zeilen nicht um. */
 const Z = '\r\n';
@@ -4151,27 +4271,42 @@ for (const a of document.querySelectorAll('a[data-mail]')){
   a.href = mailAdresse(betreff, a.dataset.mail === 'praktikum' ? MAIL_PRAKTIKUM : MAIL_BEWERBUNG);
 }
 
-/* ---- WhatsApp: jeder Knopf klappt Julias Nummer auf und wieder zu,
-   und die Nummer selbst oeffnet WhatsApp.
+/* ---- WhatsApp: der fertige wa.me-Link steht im Markup, damit der Knopf
+   auch ohne JavaScript traegt. Diese Schleife haelt ihn nur mit den
+   Konstanten oben gleich – Nummer oder Anschreiben aendert man dann an
+   EINER Stelle, nicht an dreien.
 
-   Der wa.me-Link laeuft ueber einen Meta-Server. Das ist hier vertretbar,
-   weil er erst nach ZWEI bewussten Schritten erreicht wird – Knopf tippen,
-   dann Nummer tippen. Frueher lag er direkt auf dem Knopf und schickte
-   jeden dorthin, der nur nachsehen wollte, wie man Kontakt aufnimmt.
-   Ein reiner tel:-Verweis war die Gegenprobe und half nicht: der bietet
-   nur an anzurufen, und genau darum geht es an dieser Stelle nicht. */
-for (const knopf of document.querySelectorAll('.wa__knopf')){
-  const feld = document.getElementById(knopf.getAttribute('aria-controls'));
-  if (!feld) continue;
-  knopf.addEventListener('click', () => {
-    const auf = feld.classList.toggle('auf');
-    knopf.setAttribute('aria-expanded', String(auf));
-    /* Beim Oeffnen zur Nummer springen, beim Schliessen zurueck zum Knopf –
-       sonst haengt der Fokus an einem ausgeblendeten Element. */
-    if (auf) feld.querySelector('a')?.focus();
-    else knopf.focus();
-  });
-}
+   Der Link laeuft ueber einen Meta-Server; deshalb lag frueher eine
+   Zwischenstufe davor (Knopf tippen, dann Nummer tippen). Die kostete jeden
+   Fragenden zwei Schritte und liess Julias Nummer offen stehen. Jetzt sagt
+   der Knopf an, wohin er fuehrt – und fuehrt direkt dorthin. */
+for (const a of document.querySelectorAll('a[data-wa]')) a.href = WA_LINK;
+
+/* ---- Julia-Kachel: sie steht auf, sobald die Kachel ins Bild kommt.
+   Einmalig, ohne Gegenbewegung beim Herausscrollen – hier endet die Seite,
+   wer ankommt soll den Knopf sehen und nicht ein Bild, das beim
+   Zurueckscrollen wieder verschwindet. Deshalb disconnect() nach dem
+   ersten Treffer.
+
+   Ausgeloest wird per Scrollen, nicht per Hover: auf dem Handy gibt es
+   keinen Zeiger, und ein Auftritt, den nur Mausbenutzer sehen, ist keiner.
+
+   matchMedia statt der Konstante REDUCED aus dem Kopfblock: dieser Block
+   soll auch dann noch laufen, wenn weiter oben etwas geworfen hat.
+   Ohne JavaScript und in der Audit-Ansicht steht der Endzustand im
+   Stylesheet (html.static / body.reduced), die Kachel ist also nie leer. */
+(function(){
+  const kachel = document.getElementById('juliaKachel');
+  if (!kachel) return;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches){
+    kachel.classList.add('ist-da'); return;
+  }
+  new IntersectionObserver((es, beob) => {
+    if (!es[0].isIntersecting) return;
+    kachel.classList.add('ist-da');
+    beob.disconnect();
+  }, {threshold:.28}).observe(kachel);
+})();
 
 /* Eigener Block (siehe Naht oben): Faecher und FAQ ueberleben Fehler in
    Intro/Kino – und umgekehrt. */
