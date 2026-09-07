@@ -3099,7 +3099,6 @@ html.static .wipe{clip-path:inset(0 0 0 0 round var(--radius))}
        ║ Redaktionsansicht: /ausbildung/?offen                           ║
        ║   → gestrichelte Rahmen + Tabelle in der Browserkonsole         ║
        ║                                                                 ║
-       ║ 01 noten-grenze      Gibt es eine echte Notengrenze?            ║
        ║ 02 fahrtkosten       Zuschuss / Jobticket / Parkplatz?          ║
        ║ 03 leipzig           Blockwochen, Unterkunft, wer zahlt?        ║
        ║ 04 verguetung-stufen Beträge 2., 3., 4. Lehrjahr     [SICHTBAR] ║
@@ -3139,7 +3138,7 @@ html.static .wipe{clip-path:inset(0 0 0 0 round var(--radius))}
       </div>
 
       <ul class="riegel-liste">
-        <li class="frage" id="frage-noten" data-offen="noten-grenze">
+        <li class="frage" id="frage-noten">
           <h3>
             <button class="riegel" type="button" aria-expanded="false" aria-controls="antwort-01">
               <span class="riegel__spalt" aria-hidden="true"></span>
@@ -3156,9 +3155,10 @@ html.static .wipe{clip-path:inset(0 0 0 0 round var(--radius))}
                 <b class="antwort__kurz">Bewirb dich trotzdem.</b>
                 <p>In den Anzeigen steht ein Wunsch, keine Grenze: zweimal „guter
                 mittlerer Schulabschluss", zweimal „sehr guter". Abitur braucht
-                keiner der vier Ausbildungsberufe. Genauso wichtig ist, was
-                danebensteht – technisches Verständnis, Geschick, Zuverlässigkeit.
-                Das steht in keinem Zeugnis.</p>
+                keiner der vier Ausbildungsberufe. Am genauesten schauen wir auf
+                Mathe und Physik – der Rest des Zeugnisses zählt weniger. Genauso
+                wichtig ist, was danebensteht – technisches Verständnis, Geschick,
+                Zuverlässigkeit. Das steht in keinem Zeugnis.</p>
               <ul class="fakten">
                 <li>4 Ausbildungen ohne Abi</li>
                 <li>3 duale Studiengänge mit Abi oder FH-Reife</li>
@@ -4264,7 +4264,7 @@ const MAIL_BEWERBUNG = [
 const MAIL_PRAKTIKUM = [
   'Hallo Julia,', '',
   'ich würde bei euch gern ein Schülerpraktikum machen.',
-  'Ein Zeugnis brauche ich dafür ja nicht.', '',
+  'Mein letztes Zeugnis häng ich als Handyfoto an.', '',
   'Kurz zu mir:',
   'Name:', 'Alter:', 'Schule:', 'Telefon:', 'E-Mail:',
   'Wann es bei mir passen würde:',
