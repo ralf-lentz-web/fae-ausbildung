@@ -526,6 +526,20 @@ ul{list-style:none}
 .nav.scrolled .nav__logo img{
   filter:drop-shadow(0 1px 2px rgba(var(--sh),.35))}
 
+/* Kennzeichnung KI-optimierter Inhalte: sitzt spiegelbildlich zur Wortmarke
+   in der rechten Ecke, solange die Leiste durchsichtig ist. Sobald .scrolled
+   greift, ruecken die Kacheln in genau diese Ecke – die Kennzeichnung
+   verschwindet dann, um nicht zu ueberlappen; die Aussage bleibt beim ersten
+   Blick auf die Seite sichtbar, das reicht als Hinweis. */
+.nav__ki{position:absolute;top:50%;right:11px;transform:translateY(-50%);
+  font-size:9.5px;font-weight:650;letter-spacing:.03em;line-height:1;
+  color:rgba(255,255,255,.92);white-space:nowrap;
+  padding:5px 9px;border-radius:20px;
+  background:rgba(17,18,15,.32);backdrop-filter:blur(6px);
+  border:1px solid rgba(255,255,255,.28);
+  transition:opacity .3s,visibility 0s}
+.nav.scrolled .nav__ki{opacity:0;visibility:hidden;transition:opacity .3s,visibility 0s .3s}
+
 /* Die Kacheln gehoeren zur Leiste, nicht zum Motiv: solange die Leiste
    durchsichtig ueber dem Video liegt, steht dort nur die Marke. Erst mit
    .scrolled – demselben Schalter, der den Balken einblendet – fahren sie
@@ -2488,6 +2502,7 @@ html.static .wipe{clip-path:inset(0 0 0 0 round var(--radius))}
   <a class="nav__logo" href="#top" aria-label="FAE Elektrotechnik – zum Seitenanfang">
     <img src="assets/img/fae-wortmarke.webp" alt="FAE" width="520" height="163">
   </a>
+  <span class="nav__ki" title="Bild- und Videomaterial dieser Seite wurde KI-optimiert">KI-optimiert</span>
   <nav class="nav__kacheln" aria-label="Hauptnavigation">
     <a href="#berufe">Beruf finden</a>
     <!-- „Jetzt bewerben" fuehrte bis hierher nur zum Abschnitt weiter unten:
